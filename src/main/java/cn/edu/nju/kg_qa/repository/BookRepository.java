@@ -33,4 +33,19 @@ public interface BookRepository extends Neo4jRepository<BookNode,Long> {
      * @return
      */
     List<BookNode> findAllByNameContains(String bookName);
+
+    /***
+     * isbn查询图书
+     * @param id
+     * @return
+     */
+    List<BookNode> findBookNodeById(String id);
+
+    /***
+     * 根据概念名 精准查询概念下图书
+     * @param conceptName
+     * @return
+     */
+    @Query("Match ans=(p:book)-[r]-(a:concept) where a.name=$conceptName return ans")
+    List<BookNode> findBooksByConceptName(String conceptName);
 }

@@ -43,7 +43,30 @@ public class BookService {
         return list;
     }
 
-    public List<BookNode> findBooksByName(String bookName){
+    /**
+     * 图书名 模糊查询图书
+     * @param bookName
+     * @return
+     */
+    public List<BookNode> findBooksByBookName(String bookName){
         return bookRepository.findAllByNameContains(bookName);
+    }
+
+    /**
+     * 根据ISBN号 精准查询图书
+     * @param isbn
+     * @return
+     */
+    public List<BookNode> findBookByISBN(String isbn){
+        return bookRepository.findBookNodeById(isbn);
+    }
+
+    /**
+     * 根据概念名 精准查询图书
+     * @param conceptName
+     * @return
+     */
+    public List<BookNode> findBooksByConceptName(String conceptName){
+        return bookRepository.findBooksByConceptName(conceptName);
     }
 }

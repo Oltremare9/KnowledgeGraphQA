@@ -26,10 +26,10 @@ public interface AuthorRepository extends Neo4jRepository<AuthorNode,Long> {
     List<AuthorNode> findAllByNameContains(String authorName);
 
     /**
-     * 书名模糊查询作者
+     * 书名模糊查询作者名
      * @param bookName
      * @return
      */
-    @Query("Match ans=(p:book)-[r]-(a:author) where p.name=~'.*'+$bookName+'.*' return p,a")
+    @Query("Match ans=(p:book)-[r]-(a:author) where p.name=~'.*'+$bookName+'.*' return ans")
     List<AuthorNode> findAuthorByBookName(@Param("bookName") String bookName);
 }

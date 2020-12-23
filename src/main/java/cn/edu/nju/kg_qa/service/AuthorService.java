@@ -1,6 +1,8 @@
 package cn.edu.nju.kg_qa.service;
 
+import cn.edu.nju.kg_qa.domain.base.Base;
 import cn.edu.nju.kg_qa.domain.entity.AuthorNode;
+import cn.edu.nju.kg_qa.domain.entity.BookNode;
 import cn.edu.nju.kg_qa.repository.AuthorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -49,6 +49,9 @@ public class BookService {
      * @return
      */
     public List<BookNode> findBooksByBookName(String bookName){
+        if(null==bookName){
+            return findAllBooks();
+        }
         return bookRepository.findAllByNameContains(bookName);
     }
 
@@ -68,5 +71,14 @@ public class BookService {
      */
     public List<BookNode> findBooksByConceptName(String conceptName){
         return bookRepository.findBooksByConceptName(conceptName);
+    }
+
+    /**
+     * 根据机构名 精准查询图书
+     * @param instituteName
+     * @return
+     */
+    public List<BookNode> findBooksByInstituteName(String instituteName){
+        return bookRepository.findBooksByInstituteName(instituteName);
     }
 }

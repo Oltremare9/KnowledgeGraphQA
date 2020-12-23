@@ -16,7 +16,7 @@ import org.neo4j.ogm.annotation.RelationshipEntity;
  */
 @ApiModel(value = "关系基类")
 @RelationshipEntity()
-public class BaseRelation {
+public class BaseRelation extends Base{
     @Id
     @GeneratedValue
     @ApiModelProperty(value = "neo4j默认主键")

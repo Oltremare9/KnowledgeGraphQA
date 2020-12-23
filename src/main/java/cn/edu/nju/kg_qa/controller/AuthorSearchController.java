@@ -1,5 +1,6 @@
 package cn.edu.nju.kg_qa.controller;
 
+import cn.edu.nju.kg_qa.domain.base.Base;
 import cn.edu.nju.kg_qa.domain.entity.AuthorNode;
 import cn.edu.nju.kg_qa.service.AuthorService;
 import com.alibaba.fastjson.JSON;

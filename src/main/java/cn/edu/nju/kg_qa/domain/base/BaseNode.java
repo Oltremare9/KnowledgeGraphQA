@@ -16,7 +16,7 @@ import java.awt.datatransfer.DataFlavor;
  */
 @ApiModel(value = "node基类")
 @NodeEntity(label = "")
-public class BaseNode {
+public class BaseNode extends Base{
 
     @Id
     @ApiModelProperty(value = "neo4j默认节点id")

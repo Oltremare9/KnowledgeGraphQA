@@ -13,8 +13,8 @@ import org.neo4j.ogm.annotation.StartNode;
  * @author HaoNanWang<br />
  * @since JDK 11
  */
-@RelationshipEntity(value = "belongTo",type = "belongTo")
-public class BelongRelation<S extends BaseNode,E extends BaseNode> extends BaseRelation {
+@RelationshipEntity(value = "belongTo", type = "belongTo")
+public class BelongRelation<S extends BaseNode, E extends BaseNode> extends BaseRelation {
     @StartNode
     private S startNode;
 
@@ -36,4 +36,15 @@ public class BelongRelation<S extends BaseNode,E extends BaseNode> extends BaseR
 
     @EndNode
     private E endNode;
+
+    private String relationType;
+
+    @Override
+    public void setRelationType(String relationType) {
+        super.setRelationType("belongTo");
+    }
+
+    public BelongRelation() {
+        setRelationType("");
+    }
 }

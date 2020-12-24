@@ -41,4 +41,15 @@ public class BaseRelation extends Base{
     public void setRelationName(String relationName) {
         this.relationName = relationName;
     }
+
+
+    private String relationType;
+
+    public String getRelationType() {
+        return relationType;
+    }
+
+    public void setRelationType(String relationType) {
+        this.relationType=relationType;
+    }
 }

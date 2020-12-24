@@ -64,4 +64,25 @@ public class BookNode extends BaseNode {
     public void setName(String name) {
         this.name = name;
     }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = "book";
+    }
+
+    private String label;
+
+    public BookNode(String id, String classification, String date, String name, String label) {
+        this.id = id;
+        this.classification = classification;
+        this.date = date;
+        this.name = name;
+        setLabel(" ");
+    }
+    public BookNode(){
+        setLabel(" ");
+    }
 }

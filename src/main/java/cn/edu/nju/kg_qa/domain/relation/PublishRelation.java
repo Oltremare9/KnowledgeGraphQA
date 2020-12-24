@@ -50,4 +50,13 @@ public class PublishRelation<S extends BaseNode,E extends BaseNode> extends Base
 
     @Property(value = "date",name = "date")
     private String date;
+
+    @Override
+    public void setRelationType(String relationType) {
+        super.setRelationType("publish");
+    }
+
+    public PublishRelation(){
+        this.setRelationType("");
+    }
 }

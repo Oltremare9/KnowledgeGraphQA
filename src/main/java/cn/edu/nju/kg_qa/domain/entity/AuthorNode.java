@@ -28,4 +28,23 @@ public class AuthorNode extends BaseNode {
     public void setName(String name) {
         this.name = name;
     }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = "author";
+    }
+
+    private String label;
+
+    public AuthorNode(String name, String label) {
+        this.name = name;
+        this.label = "author";
+    }
+
+    public AuthorNode(){
+        this.label="author";
+    }
 }

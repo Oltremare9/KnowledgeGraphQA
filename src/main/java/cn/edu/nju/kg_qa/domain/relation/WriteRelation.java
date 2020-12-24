@@ -38,4 +38,13 @@ public class WriteRelation<S extends BaseNode,E extends BaseNode> extends BaseRe
     @EndNode
     private E endNode;
 
+    @Override
+    public void setRelationType(String relationType) {
+        super.setRelationType("write");
+    }
+
+    public WriteRelation(){
+        this.setRelationType("");
+    }
+
 }

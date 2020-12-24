@@ -29,4 +29,22 @@ public class ConceptNode extends BaseNode {
     public void setName(String name) {
         this.name = name;
     }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = "concept";
+    }
+
+    private String label;
+
+    public ConceptNode(String name, String label) {
+        this.name = name;
+        setLabel("");
+    }
+    public ConceptNode(){
+        setLabel("");
+    }
 }

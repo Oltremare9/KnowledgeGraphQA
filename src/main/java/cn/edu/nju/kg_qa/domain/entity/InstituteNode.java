@@ -41,4 +41,23 @@ public class InstituteNode extends BaseNode {
     @Property
     @ApiModelProperty(value = "出版机构位置")
     private String position;
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = "institute";
+    }
+
+    private String label;
+
+    public InstituteNode(String name, String position, String label) {
+        this.name = name;
+        this.position = position;
+        setLabel("");
+    }
+    public InstituteNode(){
+        setLabel("");
+    }
 }

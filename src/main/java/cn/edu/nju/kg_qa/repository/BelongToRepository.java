@@ -1,11 +1,9 @@
 package cn.edu.nju.kg_qa.repository;
 
-import cn.edu.nju.kg_qa.domain.base.Base;
-import cn.edu.nju.kg_qa.domain.base.BaseRelation;
-import cn.edu.nju.kg_qa.domain.entity.AuthorNode;
 import cn.edu.nju.kg_qa.domain.relation.BelongRelation;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -21,9 +19,18 @@ import java.util.List;
 public interface BelongToRepository extends Neo4jRepository<BelongRelation,Long> {
 
     /**
-     * 查询所有的belongTo关系
+     * 根据概念名查询关系路径节点
+     * @param conceptName
      * @return
      */
-    @Query("Match (p:book)-[r]-(c:concept) return p,r,c")
-    List<BelongRelation> findAllBelongToRelation();
+    @Query("Match (p:book)-[r]-(c:concept) where c.name=$conceptName return p,r,c")
+    List<BelongRelation> findBelongToRelationByConceptName(@Param("conceptName") String conceptName);
+
+    /**
+     * 根据书籍名查询关系路径节点
+     * @param bookName
+     * @return
+     */
+    @Query("Match (p:book)-[r]-(c:concept) where p.name=$bookName return p,r,c")
+    List<BelongRelation> findBelongToRelationByBookName(@Param("bookName") String bookName);
 }

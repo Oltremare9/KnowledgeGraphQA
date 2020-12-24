@@ -5,6 +5,8 @@ import cn.edu.nju.kg_qa.domain.base.BaseRelation;
 import cn.edu.nju.kg_qa.domain.relation.BelongRelation;
 import cn.edu.nju.kg_qa.repository.BelongToRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.neo4j.annotation.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,13 +22,21 @@ import java.util.List;
 public class BelongToService {
     @Autowired
     BelongToRepository belongToRepository;
-
     /**
-     * 查询所有belongTo关系
+     * 根据概念名查询关系路径节点
+     * @param conceptName
      * @return
      */
-    public List<BelongRelation> findAllBelongToRelation(){
-        return belongToRepository.findAllBelongToRelation();
+    public List<BelongRelation> findBelongToRelationByConceptName(String conceptName){
+        return belongToRepository.findBelongToRelationByConceptName(conceptName);
     }
 
+    /**
+     * 根据书籍名查询关系路径节点
+     * @param bookName
+     * @return
+     */
+    public List<BelongRelation> findBelongToRelationByBookName(String bookName){
+        return belongToRepository.findBelongToRelationByBookName(bookName);
+    }
 }

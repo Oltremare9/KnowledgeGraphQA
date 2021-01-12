@@ -34,7 +34,7 @@ public class ImportDateController implements AutoCloseable {
 
     private Logger logger= LoggerFactory.getLogger(ImportDateController.class);
     private static final Driver driver = GraphDatabase.driver("bolt://49.235.238.192:7687",
-            AuthTokens.basic("neo4j", "neo4j"));
+            AuthTokens.basic("neo4j", "root"));
 
     @Override
     public void close() throws Exception {

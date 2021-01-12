@@ -19,6 +19,8 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.List;
 
+import static cn.edu.nju.kg_qa.config.Config.EXTRACT_NUM;
+
 /**
  * Description: <br/>
  * date: 2021/1/12 21:31<br/>
@@ -30,7 +32,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/importData")
 public class ImportDataController {
+
     private Logger logger= LoggerFactory.getLogger(ImportDataController.class);
+
     @Autowired
     HandleAuthorService handleAuthorService;
     @Autowired
@@ -57,7 +61,7 @@ public class ImportDataController {
             e.printStackTrace();
         }
         try {
-            int count = 10001;
+            int count = EXTRACT_NUM;
             int i = 0;
             CsvReader csvReader = new CsvReader(file.getAbsolutePath(), ',', Charset.forName("UTF-8"));
             while (i++ < count) {
@@ -71,12 +75,217 @@ public class ImportDataController {
                     e.printStackTrace();
                 }
                 handleAuthorService.extractAuthor(csvReader);
-                handleAuthorService.writeNationEntity();
-                handleAuthorService.writeAuthorsEntity();
-                handleAuthorService.writeAssistRelation();
-                handleAuthorService.writeHumanOfRelation();
-                handleAuthorService.writeWriteRelation();
             }
+            handleAuthorService.writeNationEntity();
+            handleAuthorService.writeAuthorsEntity();
+            handleAuthorService.writeAssistRelation();
+            handleAuthorService.writeHumanOfRelation();
+            handleAuthorService.writeWriteRelation();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return "true";
+    }
+
+    @ApiOperation(value = "实体：书籍\n")
+    @PostMapping(value = "/importBook")
+    public String importBook() {
+        File file = null;
+        try {
+            file = ResourceUtils.getFile(Config.IN_CSV_PATH);
+        } catch (FileNotFoundException e) {
+            logger.error("未找到输入文件");
+            e.printStackTrace();
+        }
+        try {
+            int count = EXTRACT_NUM;
+            int i = 0;
+            CsvReader csvReader = new CsvReader(file.getAbsolutePath(), ',', Charset.forName("UTF-8"));
+            while (i++ < count) {
+                try {
+                    if (!csvReader.readRecord()) {
+                        break;
+                    }
+
+                } catch (IOException e) {
+                    logger.error("e:文件IO读取错误");
+                    e.printStackTrace();
+                }
+                handleBookService.extractBook(csvReader);
+            }
+            handleBookService.writeBookEntity();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return "true";
+    }
+
+    @ApiOperation(value = "实体：系列丛书 关系：subBook\n")
+    @PostMapping(value = "/importBookSeries")
+    public String importBookSeries() {
+        File file = null;
+        try {
+            file = ResourceUtils.getFile(Config.IN_CSV_PATH);
+        } catch (FileNotFoundException e) {
+            logger.error("未找到输入文件");
+            e.printStackTrace();
+        }
+        try {
+            int count = EXTRACT_NUM;
+            int i = 0;
+            CsvReader csvReader = new CsvReader(file.getAbsolutePath(), ',', Charset.forName("UTF-8"));
+            while (i++ < count) {
+                try {
+                    if (!csvReader.readRecord()) {
+                        break;
+                    }
+
+                } catch (IOException e) {
+                    logger.error("e:文件IO读取错误");
+                    e.printStackTrace();
+                }
+                handleBookSeriesService.extractBookSeries(csvReader);
+            }
+            handleBookSeriesService.writeBookSeriesEntity();
+            handleBookSeriesService.writeSubBookOfRelation();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return "true";
+    }
+
+    @ApiOperation(value = "实体：城市 关系：locateIn\n")
+    @PostMapping(value = "/importCity")
+    public String importCity() {
+        File file = null;
+        try {
+            file = ResourceUtils.getFile(Config.IN_CSV_PATH);
+        } catch (FileNotFoundException e) {
+            logger.error("未找到输入文件");
+            e.printStackTrace();
+        }
+        try {
+            int count = EXTRACT_NUM;
+            int i = 0;
+            CsvReader csvReader = new CsvReader(file.getAbsolutePath(), ',', Charset.forName("UTF-8"));
+            while (i++ < count) {
+                try {
+                    if (!csvReader.readRecord()) {
+                        break;
+                    }
+
+                } catch (IOException e) {
+                    logger.error("e:文件IO读取错误");
+                    e.printStackTrace();
+                }
+                handleCityService.extractCity(csvReader);
+            }
+            handleCityService.writeCityEntity();
+            handleCityService.writeLocateInRelation();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return "true";
+    }
+
+    @ApiOperation(value = "实体：概念 关系：belongTo\n")
+    @PostMapping(value = "/importConcept")
+    public String importConcept() {
+        File file = null;
+        try {
+            file = ResourceUtils.getFile(Config.IN_CSV_PATH);
+        } catch (FileNotFoundException e) {
+            logger.error("未找到输入文件");
+            e.printStackTrace();
+        }
+        try {
+            int count = EXTRACT_NUM;
+            int i = 0;
+            CsvReader csvReader = new CsvReader(file.getAbsolutePath(), ',', Charset.forName("UTF-8"));
+            while (i++ < count) {
+                try {
+                    if (!csvReader.readRecord()) {
+                        break;
+                    }
+
+                } catch (IOException e) {
+                    logger.error("e:文件IO读取错误");
+                    e.printStackTrace();
+                }
+                handleConceptService.extractConcepts(csvReader);
+            }
+            handleConceptService.writeConceptsEntity();
+            handleConceptService.writeConceptsRelation();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return "true";
+    }
+
+    @ApiOperation(value = "实体：年 月 关系：publishMonth publishYear\n")
+    @PostMapping(value = "/importDate")
+    public String importDate() {
+        File file = null;
+        try {
+            file = ResourceUtils.getFile(Config.IN_CSV_PATH);
+        } catch (FileNotFoundException e) {
+            logger.error("未找到输入文件");
+            e.printStackTrace();
+        }
+        try {
+            int count = EXTRACT_NUM;
+            int i = 0;
+            CsvReader csvReader = new CsvReader(file.getAbsolutePath(), ',', Charset.forName("UTF-8"));
+            while (i++ < count) {
+                try {
+                    if (!csvReader.readRecord()) {
+                        break;
+                    }
+
+                } catch (IOException e) {
+                    logger.error("e:文件IO读取错误");
+                    e.printStackTrace();
+                }
+                handleDateService.extractDate(csvReader);
+            }
+            handleDateService.writeMonthEntity();
+            handleDateService.writeYearEntity();
+            handleDateService.writePublishMonthRelation();
+            handleDateService.writePublishYearRelation();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return "true";
+    }
+
+    @ApiOperation(value = "实体：机构：publish\n")
+    @PostMapping(value = "/importInstitute")
+    public String importInstitute() {
+        File file = null;
+        try {
+            file = ResourceUtils.getFile(Config.IN_CSV_PATH);
+        } catch (FileNotFoundException e) {
+            logger.error("未找到输入文件");
+            e.printStackTrace();
+        }
+        try {
+            int count = EXTRACT_NUM;
+            int i = 0;
+            CsvReader csvReader = new CsvReader(file.getAbsolutePath(), ',', Charset.forName("UTF-8"));
+            while (i++ < count) {
+                try {
+                    if (!csvReader.readRecord()) {
+                        break;
+                    }
+
+                } catch (IOException e) {
+                    logger.error("e:文件IO读取错误");
+                    e.printStackTrace();
+                }
+                handleInstituteService.extractInstitute(csvReader);
+            }
+            handleInstituteService.writeInstituteEntity();
+            handleInstituteService.writePublishRelation();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }

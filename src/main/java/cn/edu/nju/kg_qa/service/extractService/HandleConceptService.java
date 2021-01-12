@@ -3,6 +3,8 @@ package cn.edu.nju.kg_qa.service.extractService;
 import cn.edu.nju.kg_qa.config.Config;
 import com.csvreader.CsvReader;
 import com.csvreader.CsvWriter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedWriter;
@@ -20,6 +22,7 @@ import java.util.HashMap;
  */
 @Service
 public class HandleConceptService {
+    private Logger logger= LoggerFactory.getLogger(HandleConceptService.class);
     public static HashMap<String, String> concept_Entity = new HashMap<>();
     public static HashMap<String,String> write_Relation = new HashMap<>();
 
@@ -30,7 +33,7 @@ public class HandleConceptService {
             isbn = csvReader.get(0);
             concepts = csvReader.get(12).replaceAll("\\\\","").split("－");
         } catch (IOException e) {
-            System.out.println("e:读取concept错误,isbn:" + isbn);
+            logger.error("e:读取concept错误,isbn:" + isbn);
             e.printStackTrace();
         }
         for (String concept : concepts) {
@@ -68,31 +71,31 @@ public class HandleConceptService {
         try {
             conceptEntityFile.createNewFile();
         } catch (IOException e) {
-            System.out.println("e:新建concept实体concept_entity失败");
+            logger.error("e:新建concept实体concept_entity失败");
             e.printStackTrace();
         }
         BufferedWriter writer = null;
         try {
             writer = new BufferedWriter(new FileWriter(conceptEntityFile));
         } catch (IOException e) {
-            System.out.println("e:创建concept实体bufferWriter失败");
+            logger.error("e:创建concept实体bufferWriter失败");
             e.printStackTrace();
         }
         CsvWriter cWriter = new CsvWriter(writer, ',');
         try {
             cWriter.writeRecord("name".split(","), true);
         } catch (IOException e) {
-            System.out.println("e:写入表头失败");
+            logger.error("e:写入表头失败");
             e.printStackTrace();
         }
         for (HashMap.Entry<String, String> entry : concept_Entity.entrySet()) {
             String mapKey = entry.getKey();
             String mapValue = entry.getValue();
-            System.out.println(mapKey + ":" + mapValue);
+            logger.error(mapKey + ":" + mapValue);
             try {
                 cWriter.writeRecord((mapKey).split(","), true);
             } catch (IOException e) {
-                System.out.println("e:写入数据失败+key:" + mapKey);
+                logger.error("e:写入数据失败+key:" + mapKey);
                 e.printStackTrace();
             }
             cWriter.flush();//刷新数据
@@ -107,31 +110,31 @@ public class HandleConceptService {
         try {
             conceptRelationFile.createNewFile();
         } catch (IOException e) {
-            System.out.println("e:新建belongTo关系belongTo_relation失败");
+            logger.error("e:新建belongTo关系belongTo_relation失败");
             e.printStackTrace();
         }
         BufferedWriter writer = null;
         try {
             writer = new BufferedWriter(new FileWriter(conceptRelationFile));
         } catch (IOException e) {
-            System.out.println("e:创建belongTo关系bufferWriter失败");
+            logger.error("e:创建belongTo关系bufferWriter失败");
             e.printStackTrace();
         }
         CsvWriter cWriter = new CsvWriter(writer, ',');
         try {
             cWriter.writeRecord("book_id,concept_name".split(","), true);
         } catch (IOException e) {
-            System.out.println("e:写入表头失败");
+            logger.error("e:写入表头失败");
             e.printStackTrace();
         }
         for (HashMap.Entry<String, String> entry : write_Relation.entrySet()) {
             String mapKey = entry.getKey();
             String mapValue = entry.getValue();
-            System.out.println(mapKey + ":" + mapValue);
+            logger.error(mapKey + ":" + mapValue);
             try {
                 cWriter.writeRecord((mapKey).split("!"), true);
             } catch (IOException e) {
-                System.out.println("e:写入数据失败+key:" + mapKey);
+                logger.error("e:写入数据失败+key:" + mapKey);
                 e.printStackTrace();
             }
             cWriter.flush();//刷新数据

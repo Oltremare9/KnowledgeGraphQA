@@ -78,7 +78,7 @@ public class HandleAuthorService {
             nation = nation.substring(1);
             int index = nation.indexOf(")");
             nation = nation.substring(0, index);
-            if (!nation_Entity.containsKey(nation)) {
+            if (!nation_Entity.containsKey(nation) && !nation.replaceAll("\"","").equals("")) {
                 nation_Entity.put(nation, "");
             }
             humanOf_Relation.put(author + "!" + nation, "");

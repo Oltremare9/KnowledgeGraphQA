@@ -33,7 +33,7 @@ import static cn.edu.nju.kg_qa.config.Config.EXTRACT_NUM;
 @RequestMapping("/importData")
 public class ImportDataController {
 
-    private Logger logger= LoggerFactory.getLogger(ImportDataController.class);
+    private Logger logger = LoggerFactory.getLogger(ImportDataController.class);
 
     @Autowired
     HandleAuthorService handleAuthorService;
@@ -81,6 +81,7 @@ public class ImportDataController {
             handleAuthorService.writeAssistRelation();
             handleAuthorService.writeHumanOfRelation();
             handleAuthorService.writeWriteRelation();
+            handleAuthorService.clear();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -114,6 +115,7 @@ public class ImportDataController {
                 handleBookService.extractBook(csvReader);
             }
             handleBookService.writeBookEntity();
+            handleBookService.clear();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -148,6 +150,7 @@ public class ImportDataController {
             }
             handleBookSeriesService.writeBookSeriesEntity();
             handleBookSeriesService.writeSubBookOfRelation();
+            handleBookSeriesService.clear();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -182,6 +185,7 @@ public class ImportDataController {
             }
             handleCityService.writeCityEntity();
             handleCityService.writeLocateInRelation();
+            handleCityService.clear();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -216,6 +220,7 @@ public class ImportDataController {
             }
             handleConceptService.writeConceptsEntity();
             handleConceptService.writeConceptsRelation();
+            handleConceptService.clear();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -252,6 +257,7 @@ public class ImportDataController {
             handleDateService.writeYearEntity();
             handleDateService.writePublishMonthRelation();
             handleDateService.writePublishYearRelation();
+            handleDateService.clear();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -286,6 +292,7 @@ public class ImportDataController {
             }
             handleInstituteService.writeInstituteEntity();
             handleInstituteService.writePublishRelation();
+            handleInstituteService.clear();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }

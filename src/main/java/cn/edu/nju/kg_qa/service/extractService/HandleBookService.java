@@ -26,6 +26,11 @@ public class HandleBookService {
     public static ArrayList<String> list = new ArrayList<>();
 
     private Logger logger= LoggerFactory.getLogger(HandleBookService.class);
+
+    public void clear(){
+        list.clear();
+    }
+    
     public void extractBook(CsvReader csvReader) {
         String id = "";
         String classification = "";

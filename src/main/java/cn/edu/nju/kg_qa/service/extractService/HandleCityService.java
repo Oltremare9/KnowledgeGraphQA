@@ -27,6 +27,10 @@ public class HandleCityService {
     public static HashMap<String, String> city_Entity = new HashMap<>();
     public static HashMap<String, String> locateIn_Relation = new HashMap<>();
 
+    public void clear(){
+        city_Entity.clear();
+        locateIn_Relation.clear();
+    }
     public void extractCity(CsvReader csvReader) {
         String city = "";
         String institute = "";
@@ -50,7 +54,7 @@ public class HandleCityService {
 
     public void writeCityEntity() {
         {
-            File cityEntityFile = new File(Config.OUT_CSV_PATH + "\\" + "city_entity.csv");
+            File cityEntityFile = new File(Config.OUT_CSV_PATH  + "city_entity.csv");
             if (cityEntityFile.exists()) {
                 cityEntityFile.delete();
             }
@@ -90,7 +94,7 @@ public class HandleCityService {
     }
 
     public void writeLocateInRelation() {
-        File locateInRelationFile = new File(Config.OUT_CSV_PATH + "\\" + "locateIn_relation.csv");
+        File locateInRelationFile = new File(Config.OUT_CSV_PATH +  "locateIn_relation.csv");
         if (locateInRelationFile.exists()) {
             locateInRelationFile.delete();
         }

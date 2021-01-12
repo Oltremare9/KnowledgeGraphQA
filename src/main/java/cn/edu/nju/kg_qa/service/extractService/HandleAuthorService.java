@@ -36,6 +36,15 @@ public class HandleAuthorService {
     public static HashMap<String, String> assist_Relation = new HashMap<>();
 
     private Logger logger= LoggerFactory.getLogger(HandleAuthorService.class);
+
+    public void clear(){
+        author_Entity.clear();
+        write_Relation.clear();
+        nation_Entity.clear();
+        humanOf_Relation.clear();
+        assist_Relation.clear();
+    }
+
     public void extractAuthor(CsvReader csvReader) {
         String isbn = "";
         String author = "";
@@ -354,4 +363,5 @@ public class HandleAuthorService {
             cWriter.flush();//刷新数据
         }
     }
+
 }

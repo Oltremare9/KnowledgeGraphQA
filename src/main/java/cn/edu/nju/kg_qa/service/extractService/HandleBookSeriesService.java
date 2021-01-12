@@ -26,6 +26,12 @@ public class HandleBookSeriesService {
     private Logger logger= LoggerFactory.getLogger(HandleBookSeriesService.class);
     public static HashMap<String,String> map=new HashMap<>();
     public static ArrayList<String> relation=new ArrayList<>();
+
+    public void clear(){
+        map.clear();
+        relation.clear();
+    }
+
     public void extractBookSeries(CsvReader csvReader) {
         String id = "";
         String series = "";
@@ -51,7 +57,7 @@ public class HandleBookSeriesService {
     }
 
     public void writeBookSeriesEntity(){
-        File bookSeriesEntityFile = new File(Config.OUT_CSV_PATH + "\\" + "bookSeries_entity.csv");
+        File bookSeriesEntityFile = new File(Config.OUT_CSV_PATH  + "bookSeries_entity.csv");
         if (bookSeriesEntityFile.exists()) {
             bookSeriesEntityFile.delete();
         }
@@ -90,7 +96,7 @@ public class HandleBookSeriesService {
     }
 
     public void writeSubBookOfRelation() {
-        File subBookOfRelationFile = new File(Config.OUT_CSV_PATH + "\\" + "subBookOf_relation.csv");
+        File subBookOfRelationFile = new File(Config.OUT_CSV_PATH  + "subBookOf_relation.csv");
         if (subBookOfRelationFile.exists()) {
             subBookOfRelationFile.delete();
         }

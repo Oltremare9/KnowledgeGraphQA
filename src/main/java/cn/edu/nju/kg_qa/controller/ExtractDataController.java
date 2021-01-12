@@ -1,9 +1,7 @@
 package cn.edu.nju.kg_qa.controller;
 
 import cn.edu.nju.kg_qa.config.Config;
-import cn.edu.nju.kg_qa.domain.entity.InstituteNode;
 import cn.edu.nju.kg_qa.service.extractService.*;
-import com.alibaba.fastjson.JSON;
 import com.csvreader.CsvReader;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -17,7 +15,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.List;
 
 import static cn.edu.nju.kg_qa.config.Config.EXTRACT_NUM;
 
@@ -28,12 +25,12 @@ import static cn.edu.nju.kg_qa.config.Config.EXTRACT_NUM;
  * @author HaoNanWang<br />
  * @since JDK 11
  */
-@Api(tags = "导入数据接口")
+@Api(tags = "提取数据接口")
 @RestController
-@RequestMapping("/importData")
-public class ImportDataController {
+@RequestMapping("/extractData")
+public class ExtractDataController {
 
-    private Logger logger = LoggerFactory.getLogger(ImportDataController.class);
+    private Logger logger = LoggerFactory.getLogger(ExtractDataController.class);
 
     @Autowired
     HandleAuthorService handleAuthorService;

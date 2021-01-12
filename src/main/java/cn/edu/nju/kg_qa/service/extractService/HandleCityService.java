@@ -4,6 +4,8 @@ import cn.edu.nju.kg_qa.config.Config;
 import cn.edu.nju.kg_qa.config.TableHead;
 import com.csvreader.CsvReader;
 import com.csvreader.CsvWriter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedWriter;
@@ -21,6 +23,7 @@ import java.util.HashMap;
  */
 @Service
 public class HandleCityService {
+    private Logger logger= LoggerFactory.getLogger(HandleCityService.class);
     public static HashMap<String, String> city_Entity = new HashMap<>();
     public static HashMap<String, String> locateIn_Relation = new HashMap<>();
 
@@ -33,7 +36,7 @@ public class HandleCityService {
             city = csvReader.get(14);
             institute = csvReader.get(4);
         } catch (IOException e) {
-            System.out.println("e:读取字段错误,isbn:" + isbn);
+            logger.error("e:读取字段错误,isbn:" + isbn);
             e.printStackTrace();
         }
         if (TableHead.PUBLISHMENT.name().equalsIgnoreCase(institute)) {
@@ -54,31 +57,31 @@ public class HandleCityService {
             try {
                 cityEntityFile.createNewFile();
             } catch (IOException e) {
-                System.out.println("e:新建city实体city_entity失败");
+                logger.error("e:新建city实体city_entity失败");
                 e.printStackTrace();
             }
             BufferedWriter writer = null;
             try {
                 writer = new BufferedWriter(new FileWriter(cityEntityFile));
             } catch (IOException e) {
-                System.out.println("e:创建city实体bufferWriter失败");
+                logger.error("e:创建city实体bufferWriter失败");
                 e.printStackTrace();
             }
             CsvWriter cWriter = new CsvWriter(writer, ',');
             try {
                 cWriter.writeRecord("name".split(","), true);
             } catch (IOException e) {
-                System.out.println("e:写入表头失败");
+                logger.error("e:写入表头失败");
                 e.printStackTrace();
             }
             for (HashMap.Entry<String, String> entry : city_Entity.entrySet()) {
                 String mapKey = entry.getKey();
                 String mapValue = entry.getValue();
-                System.out.println(mapKey + ":" + mapValue);
+                logger.error(mapKey + ":" + mapValue);
                 try {
                     cWriter.writeRecord((mapKey).split(","), true);
                 } catch (IOException e) {
-                    System.out.println("e:写入数据失败+key:" + mapKey);
+                    logger.error("e:写入数据失败+key:" + mapKey);
                     e.printStackTrace();
                 }
                 cWriter.flush();//刷新数据
@@ -94,31 +97,31 @@ public class HandleCityService {
         try {
             locateInRelationFile.createNewFile();
         } catch (IOException e) {
-            System.out.println("e:新建locateIn关系locateIn_relation失败");
+            logger.error("e:新建locateIn关系locateIn_relation失败");
             e.printStackTrace();
         }
         BufferedWriter writer = null;
         try {
             writer = new BufferedWriter(new FileWriter(locateInRelationFile));
         } catch (IOException e) {
-            System.out.println("e:创建locateIn关系bufferWriter失败");
+            logger.error("e:创建locateIn关系bufferWriter失败");
             e.printStackTrace();
         }
         CsvWriter cWriter = new CsvWriter(writer, ',');
         try {
             cWriter.writeRecord("institute_name,city_name".split(","), true);
         } catch (IOException e) {
-            System.out.println("e:写入表头失败");
+            logger.error("e:写入表头失败");
             e.printStackTrace();
         }
         for (HashMap.Entry<String, String> entry : locateIn_Relation.entrySet()) {
             String mapKey = entry.getKey();
             String mapValue = entry.getValue();
-            System.out.println(mapKey + ":" + mapValue);
+            logger.error(mapKey + ":" + mapValue);
             try {
                 cWriter.writeRecord((mapKey).split("!"), true);
             } catch (IOException e) {
-                System.out.println("e:写入数据失败+key:" + mapKey);
+                logger.error("e:写入数据失败+key:" + mapKey);
                 e.printStackTrace();
             }
             cWriter.flush();//刷新数据

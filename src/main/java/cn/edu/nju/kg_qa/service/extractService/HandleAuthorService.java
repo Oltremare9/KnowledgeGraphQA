@@ -41,7 +41,7 @@ public class HandleAuthorService {
         String author = "";
         String assistant = "";
         try {
-            isbn = csvReader.get(0);
+            isbn = csvReader.get(0).replaceAll("\"","");
             author = csvReader.get(2).replaceAll("\\\\", "");
             assistant = csvReader.get(8).replaceAll("\\\\", "");
         } catch (IOException e) {
@@ -191,7 +191,7 @@ public class HandleAuthorService {
             logger.error("文件{}未找到",nationEntityFile.getAbsolutePath());
             e.printStackTrace();
         }
-        logger.info("文件名为{}",nationEntityFile.getAbsolutePath());
+        logger.debug("文件名为{}",nationEntityFile.getAbsolutePath());
         if (nationEntityFile.exists()) {
             nationEntityFile.delete();
         }
@@ -278,7 +278,7 @@ public class HandleAuthorService {
     }
 
     public void writeHumanOfRelation() {
-        File humanOfRelationFile = new File(Config.OUT_CSV_PATH + "\\" + "humanOf_relation.csv");
+        File humanOfRelationFile = new File(Config.OUT_CSV_PATH + "humanOf_relation.csv");
         if (humanOfRelationFile.exists()) {
             humanOfRelationFile.delete();
         }
@@ -317,7 +317,7 @@ public class HandleAuthorService {
     }
 
     public void writeAssistRelation() {
-        File assistRelationFile = new File(Config.OUT_CSV_PATH + "\\" + "assist_relation.csv");
+        File assistRelationFile = new File(Config.OUT_CSV_PATH  + "assist_relation.csv");
         if (assistRelationFile.exists()) {
             assistRelationFile.delete();
         }

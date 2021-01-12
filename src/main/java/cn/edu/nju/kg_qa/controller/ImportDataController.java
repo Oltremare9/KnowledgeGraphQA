@@ -7,7 +7,10 @@ import com.alibaba.fastjson.JSON;
 import com.csvreader.CsvReader;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
@@ -27,6 +30,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/importData")
 public class ImportDataController {
+    private Logger logger= LoggerFactory.getLogger(ImportDataController.class);
     @Autowired
     HandleAuthorService handleAuthorService;
     @Autowired
@@ -45,7 +49,13 @@ public class ImportDataController {
     @ApiOperation(value = "实体：作者 国籍\n" + "关系：assist write humanOf ")
     @PostMapping(value = "/importAuthor")
     public String importAuthor() {
-        File file = new File(Config.IN_CSV_PATH);
+        File file = null;
+        try {
+            file = ResourceUtils.getFile(Config.IN_CSV_PATH);
+        } catch (FileNotFoundException e) {
+            logger.error("未找到文件");
+            e.printStackTrace();
+        }
         try {
             int count = 10001;
             int i = 0;
@@ -57,7 +67,7 @@ public class ImportDataController {
                     }
 
                 } catch (IOException e) {
-                    System.out.println("e:文件IO读取错误");
+                    logger.error("e:文件IO读取错误");
                     e.printStackTrace();
                 }
                 handleAuthorService.extractAuthor(csvReader);

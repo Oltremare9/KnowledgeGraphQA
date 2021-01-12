@@ -5,16 +5,18 @@ import cn.edu.nju.kg_qa.config.Config;
 import cn.edu.nju.kg_qa.config.TableHead;
 import com.csvreader.CsvReader;
 import com.csvreader.CsvWriter;
+import lombok.extern.flogger.Flogger;
+import net.bytebuddy.jar.asm.Handle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import cn.edu.nju.kg_qa.config.Config;
+import org.springframework.util.ResourceUtils;
 
 /**
  * Description:
@@ -33,6 +35,7 @@ public class HandleAuthorService {
     public static HashMap<String, String> humanOf_Relation = new HashMap<>();
     public static HashMap<String, String> assist_Relation = new HashMap<>();
 
+    private Logger logger= LoggerFactory.getLogger(HandleAuthorService.class);
     public void extractAuthor(CsvReader csvReader) {
         String isbn = "";
         String author = "";
@@ -134,7 +137,14 @@ public class HandleAuthorService {
 
 
     public void writeAuthorsEntity() {
-        File authorEntityFile = new File(Config.OUT_CSV_PATH + "\\" + "author_entity.csv");
+        File authorEntityFile = null;
+        try {
+            authorEntityFile = ResourceUtils.getFile(Config.OUT_CSV_PATH+"author_entity.csv");
+        } catch (FileNotFoundException e) {
+            logger.error("文件未找到");
+            e.printStackTrace();
+        }
+
         if (authorEntityFile.exists()) {
             authorEntityFile.delete();
         }
@@ -174,7 +184,13 @@ public class HandleAuthorService {
     }
 
     public void writeNationEntity() {
-        File nationEntityFile = new File(Config.OUT_CSV_PATH + "\\" + "nation_entity.csv");
+        File nationEntityFile = null;
+        try {
+            nationEntityFile = ResourceUtils.getFile(Config.OUT_CSV_PATH+"nation_entity.csv");
+        } catch (FileNotFoundException e) {
+            logger.error("文件{}未找到",nationEntityFile.getAbsolutePath());
+            e.printStackTrace();
+        }
         if (nationEntityFile.exists()) {
             nationEntityFile.delete();
         }
@@ -213,7 +229,13 @@ public class HandleAuthorService {
     }
 
     public void writeWriteRelation() {
-        File writeRelationFile = new File(Config.OUT_CSV_PATH + "\\" + "write_relation.csv");
+        File writeRelationFile =null;
+        try {
+            writeRelationFile = ResourceUtils.getFile(Config.OUT_CSV_PATH+"write_relation.csv");
+        } catch (FileNotFoundException e) {
+            logger.error("未找到指定文件writeWriteRelation");
+            e.printStackTrace();
+        }
         if (writeRelationFile.exists()) {
             writeRelationFile.delete();
         }

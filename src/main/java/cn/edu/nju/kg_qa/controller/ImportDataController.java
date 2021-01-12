@@ -72,10 +72,10 @@ public class ImportDataController {
                 }
                 handleAuthorService.extractAuthor(csvReader);
                 handleAuthorService.writeNationEntity();
-                handleAuthorService.writeAuthorsEntity();
-                handleAuthorService.writeAssistRelation();
-                handleAuthorService.writeHumanOfRelation();
-                handleAuthorService.writeWriteRelation();
+//                handleAuthorService.writeAuthorsEntity();
+//                handleAuthorService.writeAssistRelation();
+//                handleAuthorService.writeHumanOfRelation();
+//                handleAuthorService.writeWriteRelation();
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();

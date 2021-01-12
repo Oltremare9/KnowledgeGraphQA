@@ -191,6 +191,7 @@ public class HandleAuthorService {
             logger.error("文件{}未找到",nationEntityFile.getAbsolutePath());
             e.printStackTrace();
         }
+        logger.info("文件名为{}",nationEntityFile.getAbsolutePath());
         if (nationEntityFile.exists()) {
             nationEntityFile.delete();
         }

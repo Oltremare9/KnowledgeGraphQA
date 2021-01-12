@@ -30,6 +30,13 @@ public class HandleDateService {
     ArrayList<String> publishYear_Relation = new ArrayList<>();
 
     private Logger logger= LoggerFactory.getLogger(HandleDateService.class);
+
+    public void clear(){
+        year_Entity.clear();
+        month_Entity.clear();
+        publishMonth_Relation.clear();
+        publishYear_Relation.clear();
+    }
     public void extractDate(CsvReader csvReader) {
         String date = "";
         String isbn = "";
@@ -69,7 +76,7 @@ public class HandleDateService {
 
     public void writeYearEntity() {
         {
-            File yearEntityFile = new File(Config.OUT_CSV_PATH + "\\" + "year_entity.csv");
+            File yearEntityFile = new File(Config.OUT_CSV_PATH  + "year_entity.csv");
             if (yearEntityFile.exists()) {
                 yearEntityFile.delete();
             }
@@ -110,7 +117,7 @@ public class HandleDateService {
 
     public void writeMonthEntity() {
         {
-            File monthEntityFile = new File(Config.OUT_CSV_PATH + "\\" + "month_entity.csv");
+            File monthEntityFile = new File(Config.OUT_CSV_PATH  + "month_entity.csv");
             if (monthEntityFile.exists()) {
                 monthEntityFile.delete();
             }
@@ -150,7 +157,7 @@ public class HandleDateService {
     }
 
     public void writePublishYearRelation() {
-        File publishYearRelationFile = new File(Config.OUT_CSV_PATH + "\\" + "publishYear_relation.csv");
+        File publishYearRelationFile = new File(Config.OUT_CSV_PATH  + "publishYear_relation.csv");
         if (publishYearRelationFile.exists()) {
             publishYearRelationFile.delete();
         }
@@ -191,7 +198,7 @@ public class HandleDateService {
     }
 
     public void writePublishMonthRelation() {
-        File publishMonthRelationFile = new File(Config.OUT_CSV_PATH + "\\" + "publishMonth_relation.csv");
+        File publishMonthRelationFile = new File(Config.OUT_CSV_PATH  + "publishMonth_relation.csv");
         if (publishMonthRelationFile.exists()) {
             publishMonthRelationFile.delete();
         }

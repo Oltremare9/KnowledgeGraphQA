@@ -24,6 +24,10 @@ public class HandleInstituteService {
     public static HashMap<String, String> map = new HashMap<>();
     public static ArrayList<String> relation = new ArrayList<>();
 
+    public void clear(){
+        map.clear();
+        relation.clear();
+    }
     public void extractInstitute(CsvReader csvReader) {
         String id = "";
         String publishment = "";
@@ -46,7 +50,7 @@ public class HandleInstituteService {
     }
 
     public void writeInstituteEntity() {
-        File instituteEntityFile = new File(Config.OUT_CSV_PATH + "\\" + "institute_entity.csv");
+        File instituteEntityFile = new File(Config.OUT_CSV_PATH  + "institute_entity.csv");
         if (instituteEntityFile.exists()) {
             instituteEntityFile.delete();
         }
@@ -85,7 +89,7 @@ public class HandleInstituteService {
     }
 
     public void writePublishRelation() {
-        File publishRelationFile = new File(Config.OUT_CSV_PATH + "\\" + "publish_relation.csv");
+        File publishRelationFile = new File(Config.OUT_CSV_PATH + "publish_relation.csv");
         if (publishRelationFile.exists()) {
             publishRelationFile.delete();
         }

@@ -26,6 +26,10 @@ public class HandleConceptService {
     public static HashMap<String, String> concept_Entity = new HashMap<>();
     public static HashMap<String,String> write_Relation = new HashMap<>();
 
+    public void clear(){
+        concept_Entity.clear();
+        write_Relation.clear();
+    }
     public void extractConcepts(CsvReader csvReader) {
         String isbn = "";
         String[] concepts = new String[0];
@@ -64,7 +68,7 @@ public class HandleConceptService {
     }
 
     public void writeConceptsEntity() {
-        File conceptEntityFile = new File(Config.OUT_CSV_PATH + "\\" + "concept_entity.csv");
+        File conceptEntityFile = new File(Config.OUT_CSV_PATH  + "concept_entity.csv");
         if (conceptEntityFile.exists()) {
             conceptEntityFile.delete();
         }
@@ -103,7 +107,7 @@ public class HandleConceptService {
     }
 
     public void writeConceptsRelation() {
-        File conceptRelationFile = new File(Config.OUT_CSV_PATH + "\\" + "belongTo_relation.csv");
+        File conceptRelationFile = new File(Config.OUT_CSV_PATH  + "belongTo_relation.csv");
         if (conceptRelationFile.exists()) {
             conceptRelationFile.delete();
         }

@@ -1,5 +1,6 @@
 package cn.edu.nju.kg_qa.controller;
 
+import cn.edu.nju.kg_qa.common.CommonResult;
 import cn.edu.nju.kg_qa.domain.entity.BookNode;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -15,12 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(tags = "hello 测试系统联通性 以及jenkins使用")
 @RestController
 public class HelloController {
-    private static Logger log= LoggerFactory.getLogger(HelloController.class);
+    private static Logger log = LoggerFactory.getLogger(HelloController.class);
 
     @RequestMapping("/hello")
-    @ApiOperation(value="无参数")
-    public String sayHello(BookNode node) {
+    @ApiOperation(value = "无参数")
+    public CommonResult<Boolean> sayHello(BookNode node) {
         log.info("hello the nice world!");
-        return "Hello the World! 12：22"+node.toString();
+        return CommonResult.success(null, "hello world");
     }
 }

@@ -1,5 +1,6 @@
 package cn.edu.nju.kg_qa.controller;
 
+import cn.edu.nju.kg_qa.common.CommonResult;
 import cn.edu.nju.kg_qa.domain.base.BaseRelation;
 import cn.edu.nju.kg_qa.domain.relation.BelongRelation;
 import cn.edu.nju.kg_qa.domain.relation.PublishRelation;
@@ -40,47 +41,47 @@ public class RelationSearchController {
 
     @ApiOperation("根据概念名 查询belongTo概念关系")
     @GetMapping("/findBelongToRelationByConceptName/{conceptName}")
-    String findBelongToRelationByConceptName(@PathVariable String conceptName) {
+    public CommonResult<List<BelongRelation>> findBelongToRelationByConceptName(@PathVariable String conceptName) {
         List<BelongRelation> list = belongToService.findBelongToRelationByConceptName(conceptName);
-        return JSON.toJSONString(list);
+        return CommonResult.success(list);
     }
 
     @ApiOperation("根据书籍名 查询belongTo概念关系")
     @GetMapping("/findBelongToRelationByBookName/{bookName}")
-    String findBelongToRelationByBookName(@PathVariable String bookName) {
+    public CommonResult<List<BelongRelation>> findBelongToRelationByBookName(@PathVariable String bookName) {
         List<BelongRelation> list = belongToService.findBelongToRelationByBookName(bookName);
-        return JSON.toJSONString(list);
+        return CommonResult.success(list);
     }
 
 
     @ApiOperation("根据机构名查询publish关系路径节点")
     @GetMapping("/findPublishRelationByAuthorName/{instituteName}")
-    public String findPublishRelationByAuthorName(@PathVariable String instituteName) {
+    public CommonResult<List<PublishRelation>> findPublishRelationByAuthorName(@PathVariable String instituteName) {
         List<PublishRelation> list = publishService.findPublishRelationByInstituteName(instituteName);
-        return JSON.toJSONString(list);
+        return CommonResult.success(list);
     }
 
 
     @ApiOperation("根据书籍名查询publish关系路径节点")
     @GetMapping("/findPublishRelationByBookName/{bookName}")
-    public String findPublishRelationByBookName(@PathVariable String bookName) {
+    public CommonResult<List<PublishRelation>> findPublishRelationByBookName(@PathVariable String bookName) {
         List<PublishRelation> list = publishService.findPublishRelationByBookName(bookName);
-        return JSON.toJSONString(list);
+        return CommonResult.success(list);
     }
 
     @ApiOperation("根据作者名查询write关系路径节点")
     @GetMapping("/findWriteRelationByAuthorName/{authorName}")
-    public String findWriteRelationByAuthorName(@PathVariable String authorName) {
+    public CommonResult<List<WriteRelation>> findWriteRelationByAuthorName(@PathVariable String authorName) {
         List<WriteRelation> list = writeService.findWriteRelationByAuthorName(authorName);
-        return JSON.toJSONString(list);
+        return CommonResult.success(list);
     }
 
 
     @ApiOperation("根据书籍名查询write关系路径节点")
     @GetMapping("/findWriteRelationByBookName/{bookName}")
-    public String findWriteRelationByBookName(@PathVariable String bookName) {
+    public CommonResult<List<WriteRelation>> findWriteRelationByBookName(@PathVariable String bookName) {
         List<WriteRelation> list = writeService.findWriteRelationByBookName(bookName);
-        return JSON.toJSONString(list);
+        return CommonResult.success(list);
     }
 
 

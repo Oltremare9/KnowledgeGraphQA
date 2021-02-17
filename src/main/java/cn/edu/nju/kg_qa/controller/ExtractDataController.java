@@ -1,5 +1,6 @@
 package cn.edu.nju.kg_qa.controller;
 
+import cn.edu.nju.kg_qa.common.CommonResult;
 import cn.edu.nju.kg_qa.config.Config;
 import cn.edu.nju.kg_qa.service.extractService.*;
 import com.csvreader.CsvReader;
@@ -49,13 +50,14 @@ public class ExtractDataController {
 
     @ApiOperation(value = "实体：作者 国籍\n" + "关系：assist write humanOf ")
     @PostMapping(value = "/importAuthor")
-    public String importAuthor() {
+    public CommonResult<Boolean> importAuthor() {
         File file = null;
         try {
             file = ResourceUtils.getFile(Config.IN_CSV_PATH);
         } catch (FileNotFoundException e) {
             logger.error("未找到文件");
             e.printStackTrace();
+            return CommonResult.failed("提取失败，未找到文件");
         }
         try {
             int count = EXTRACT_NUM;
@@ -70,6 +72,7 @@ public class ExtractDataController {
                 } catch (IOException e) {
                     logger.error("e:文件IO读取错误");
                     e.printStackTrace();
+                    return CommonResult.failed("提取失败，文件IO读取错误");
                 }
                 handleAuthorService.extractAuthor(csvReader);
             }
@@ -82,18 +85,19 @@ public class ExtractDataController {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        return "true";
+        return CommonResult.success(true,"提取成功");
     }
 
     @ApiOperation(value = "实体：书籍\n")
     @PostMapping(value = "/importBook")
-    public String importBook() {
+    public CommonResult<Boolean> importBook() {
         File file = null;
         try {
             file = ResourceUtils.getFile(Config.IN_CSV_PATH);
         } catch (FileNotFoundException e) {
             logger.error("未找到输入文件");
             e.printStackTrace();
+            return CommonResult.failed("提取失败，未找到文件");
         }
         try {
             int count = EXTRACT_NUM;
@@ -108,6 +112,7 @@ public class ExtractDataController {
                 } catch (IOException e) {
                     logger.error("e:文件IO读取错误");
                     e.printStackTrace();
+                    return CommonResult.failed("提取失败，文件IO读取错误");
                 }
                 handleBookService.extractBook(csvReader);
             }
@@ -116,12 +121,12 @@ public class ExtractDataController {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        return "true";
+        return CommonResult.success(true,"提取成功");
     }
 
     @ApiOperation(value = "实体：系列丛书 关系：subBook\n")
     @PostMapping(value = "/importBookSeries")
-    public String importBookSeries() {
+    public CommonResult<Boolean> importBookSeries() {
         File file = null;
         try {
             file = ResourceUtils.getFile(Config.IN_CSV_PATH);
@@ -151,12 +156,12 @@ public class ExtractDataController {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        return "true";
+        return CommonResult.success(true,"提取成功");
     }
 
     @ApiOperation(value = "实体：城市 关系：locateIn\n")
     @PostMapping(value = "/importCity")
-    public String importCity() {
+    public CommonResult<Boolean> importCity() {
         File file = null;
         try {
             file = ResourceUtils.getFile(Config.IN_CSV_PATH);
@@ -186,12 +191,12 @@ public class ExtractDataController {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        return "true";
+        return CommonResult.success(true,"提取成功");
     }
 
     @ApiOperation(value = "实体：概念 关系：belongTo\n")
     @PostMapping(value = "/importConcept")
-    public String importConcept() {
+    public CommonResult<Boolean> importConcept() {
         File file = null;
         try {
             file = ResourceUtils.getFile(Config.IN_CSV_PATH);
@@ -221,12 +226,12 @@ public class ExtractDataController {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        return "true";
+        return CommonResult.success(true,"提取成功");
     }
 
     @ApiOperation(value = "实体：年 月 关系：publishMonth publishYear\n")
     @PostMapping(value = "/importDate")
-    public String importDate() {
+    public CommonResult<Boolean> importDate() {
         File file = null;
         try {
             file = ResourceUtils.getFile(Config.IN_CSV_PATH);
@@ -258,12 +263,12 @@ public class ExtractDataController {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        return "true";
+        return CommonResult.success(true,"提取成功");
     }
 
     @ApiOperation(value = "实体：机构：publish\n")
     @PostMapping(value = "/importInstitute")
-    public String importInstitute() {
+    public CommonResult<Boolean> importInstitute() {
         File file = null;
         try {
             file = ResourceUtils.getFile(Config.IN_CSV_PATH);
@@ -293,6 +298,6 @@ public class ExtractDataController {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        return "true";
+        return CommonResult.success(true,"提取成功");
     }
 }

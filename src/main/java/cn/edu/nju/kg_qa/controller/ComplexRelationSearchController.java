@@ -1,5 +1,6 @@
 package cn.edu.nju.kg_qa.controller;
 
+import cn.edu.nju.kg_qa.common.CommonResult;
 import cn.edu.nju.kg_qa.domain.base.BaseRelation;
 import cn.edu.nju.kg_qa.service.ComplexService;
 import com.alibaba.fastjson.JSON;
@@ -29,8 +30,8 @@ public class ComplexRelationSearchController {
 
     @ApiOperation("根据节点名返回所有符合条件的关系")
     @GetMapping("/findAnyProperRelationByName/{nodeName}")
-    public String findAnyProperRelationsByName(@PathVariable String nodeName) {
+    public CommonResult<List<BaseRelation>> findAnyProperRelationsByName(@PathVariable String nodeName) {
         List<BaseRelation> list = complexService.findAnyProperRelationByName(nodeName);
-        return JSON.toJSONString(list);
+        return CommonResult.success(list);
     }
 }

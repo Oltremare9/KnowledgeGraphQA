@@ -40,9 +40,9 @@ public class AuthorSearchController {
 
     @ApiOperation(value = "书籍名模糊查找作者")
     @GetMapping("/findAuthorByBookName/{bookName}")
-    public String findAuthorByBookName(@PathVariable String bookName){
+    public CommonResult<List<AuthorNode>> findAuthorByBookName(@PathVariable String bookName){
         List<AuthorNode> list=authorService.findAuthorByBookName(bookName);
-        return JSON.toJSONString(list);
+        return CommonResult.success(list);
     }
 
 }

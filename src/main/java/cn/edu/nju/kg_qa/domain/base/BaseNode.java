@@ -2,6 +2,7 @@ package cn.edu.nju.kg_qa.domain.base;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.neo4j.ogm.annotation.GeneratedValue;
 import org.neo4j.ogm.annotation.Id;
 import org.neo4j.ogm.annotation.NodeEntity;
 
@@ -18,10 +19,6 @@ import java.awt.datatransfer.DataFlavor;
 @NodeEntity(label = "")
 public class BaseNode extends Base{
 
-    @Id
-    @ApiModelProperty(value = "neo4j默认节点id")
-    private Long identity;
-
     public Long getIdentity() {
         return identity;
     }
@@ -29,4 +26,11 @@ public class BaseNode extends Base{
     public void setIdentity(Long identity) {
         this.identity = identity;
     }
+
+    @Id
+    @GeneratedValue
+    @ApiModelProperty(value = "neo4j默认主键")
+    private Long identity;
+
+
 }

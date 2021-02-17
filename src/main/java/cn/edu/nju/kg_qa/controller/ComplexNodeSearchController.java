@@ -1,5 +1,6 @@
 package cn.edu.nju.kg_qa.controller;
 
+import cn.edu.nju.kg_qa.common.CommonResult;
 import cn.edu.nju.kg_qa.domain.base.BaseNode;
 import cn.edu.nju.kg_qa.domain.base.BaseRelation;
 import cn.edu.nju.kg_qa.service.ComplexService;
@@ -30,8 +31,7 @@ public class ComplexNodeSearchController {
 
     @ApiOperation("根据节点名返回所有符合条件的节点")
     @GetMapping("/findAnyProperNodeByName/{nodeName}")
-    public String findAnyProperNodeByName(@PathVariable String nodeName) {
+    public CommonResult<List<BaseNode>> findAnyProperNodeByName(@PathVariable String nodeName) {
         List<BaseNode> list = complexService.findAnyProperNodesByName(nodeName);
-        return JSON.toJSONString(list);
-    }
+        return CommonResult.success(list);    }
 }

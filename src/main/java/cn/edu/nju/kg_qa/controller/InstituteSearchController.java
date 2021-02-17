@@ -1,5 +1,6 @@
 package cn.edu.nju.kg_qa.controller;
 
+import cn.edu.nju.kg_qa.common.CommonResult;
 import cn.edu.nju.kg_qa.domain.entity.InstituteNode;
 import cn.edu.nju.kg_qa.service.InstituteService;
 import com.alibaba.fastjson.JSON;
@@ -29,22 +30,22 @@ public class InstituteSearchController {
 
     @ApiOperation(value = "机构名 模糊 查询机构")
     @GetMapping(value = "/findInstitutesByInstituteName/{instituteName}")
-    public String findInstituteByInstituteName(@PathVariable String instituteName) {
+    public CommonResult<List<InstituteNode>> findInstituteByInstituteName(@PathVariable String instituteName) {
         List<InstituteNode> list=instituteService.findInstituteByInstituteName(instituteName);
-        return JSON.toJSONString(list);
+        return CommonResult.success(list);
     }
 
     @ApiOperation(value = "书名 精准 查询机构")
     @GetMapping(value = "/findInstitutesByBookName/{bookName}")
-    public String findInstitutesByBookName(@PathVariable String bookName) {
+    public CommonResult<List<InstituteNode>> findInstitutesByBookName(@PathVariable String bookName) {
         List<InstituteNode> list=instituteService.findInstituteNodesByBookName(bookName);
-        return JSON.toJSONString(list);
+        return CommonResult.success(list);
     }
 
     @ApiOperation(value = "地名城市 精准 查询机构")
     @GetMapping(value = "/findInstitutesByPosition/{position}")
-    public String findInstitutesByPosition(@PathVariable String position) {
+    public CommonResult<List<InstituteNode>> findInstitutesByPosition(@PathVariable String position) {
         List<InstituteNode> list=instituteService.findInstituteByPosition(position);
-        return JSON.toJSONString(list);
+        return CommonResult.success(list);
     }
 }

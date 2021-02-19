@@ -1,5 +1,6 @@
 package cn.edu.nju.kg_qa.controller;
 
+import cn.edu.nju.kg_qa.common.CommonResult;
 import cn.edu.nju.kg_qa.domain.entity.BookNode;
 import cn.edu.nju.kg_qa.service.BookService;
 import com.alibaba.fastjson.JSON;
@@ -29,44 +30,43 @@ public class BookSearchController {
 
     @ApiOperation(value = "作者名模糊 查询 图书")
     @GetMapping("/findBooksByAuthorName/{authorName}")
-    public String findBookByAuthorName(@PathVariable String authorName) {
+    public CommonResult<List<BookNode>> findBookByAuthorName(@PathVariable String authorName) {
         List<BookNode> list = bookService.findBooksByAuthorName(authorName);
-        String data = JSON.toJSONString(list);
-        return data;
+        return CommonResult.success(list);
     }
 
     @ApiOperation(value = "查询所有图书")
     @GetMapping("/findAllBooks")
-    public String findAllBooks() {
+    public CommonResult<List<BookNode>> findAllBooks() {
         List<BookNode> list = bookService.findAllBooks();
-        return JSON.toJSONString(list);
+        return CommonResult.success(list);
     }
 
     @ApiOperation(value = "书名 模糊 查询图书")
     @GetMapping(value = {"/findBooksByBookName/{bookName}", "/findBooksByBookName"})
-    public String findBooksByBookName(@PathVariable(required = false) String bookName) {
+    public CommonResult<List<BookNode>> findBooksByBookName(@PathVariable(required = false) String bookName) {
         List<BookNode> list = bookService.findBooksByBookName(bookName);
-        return JSON.toJSONString(list);
+        return CommonResult.success(list);
     }
 
     @ApiOperation(value = "根据ISBN 精准查询图书")
     @GetMapping("/findBookByISBN/{isbn}")
-    public String findBookByISBN(@PathVariable String isbn) {
+    public CommonResult<List<BookNode>> findBookByISBN(@PathVariable String isbn) {
         List<BookNode> list = bookService.findBookByISBN(isbn);
-        return JSON.toJSONString(list);
+        return CommonResult.success(list);
     }
 
     @ApiOperation(value = "根据概念名 精准查询图书")
     @GetMapping("/findBooksByConceptName/{conceptName}")
-    public String findBooksByConceptName(@PathVariable String conceptName) {
+    public CommonResult<List<BookNode>> findBooksByConceptName(@PathVariable String conceptName) {
         List<BookNode> list = bookService.findBooksByConceptName(conceptName);
-        return JSON.toJSONString(list);
+        return CommonResult.success(list);
     }
 
     @ApiOperation(value = "根据机构名 精准查询图书")
     @GetMapping("/findBooksByInstituteName/{instituteName}")
-    public String findBooksByInstituteName(@PathVariable String instituteName) {
+    public CommonResult<List<BookNode>> findBooksByInstituteName(@PathVariable String instituteName) {
         List<BookNode> list = bookService.findBooksByInstituteName(instituteName);
-        return JSON.toJSONString(list);
+        return CommonResult.success(list);
     }
 }

@@ -1,5 +1,6 @@
 package cn.edu.nju.kg_qa.controller;
 
+import cn.edu.nju.kg_qa.common.CommonResult;
 import cn.edu.nju.kg_qa.service.extractService.ImportDataService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -43,7 +44,7 @@ public class ImportDateController implements AutoCloseable {
 
     @ApiOperation(value = "导入所有实体节点")
     @PostMapping(value = "/importAllEntities")
-    public String importAllEntity() {
+    public CommonResult<Boolean> importAllEntity() {
         File folder = new File(Config.OUT_CSV_PATH);
         File[] files = folder.listFiles();
         for (File entityFile : files) {
@@ -61,12 +62,12 @@ public class ImportDateController implements AutoCloseable {
             }
             importDataService.importDataForEntity(entityFile, entityName,driver);
         }
-        return "true";
+        return CommonResult.success(true);
     }
 
     @ApiOperation(value = "导入所有关系")
     @PostMapping(value = "/importAllRelation")
-    public String importAllRelation() {
+    public CommonResult<Boolean> importAllRelation() {
         File folder = new File(Config.OUT_CSV_PATH);
         File[] files = folder.listFiles();
         for (File relationFile : files) {
@@ -84,6 +85,6 @@ public class ImportDateController implements AutoCloseable {
             }
             importDataService.importDataForRelation(relationFile, relationName,driver);
         }
-        return "true";
+        return CommonResult.success(true);
     }
 }

@@ -14,4 +14,7 @@ public class Config {
     public final static String OUT_CSV_PATH="/usr/local/neo4j/neo4j-community-4.1.5/import/";
     public final static int EXTRACT_NUM=10001;
     public final static int BATCH_IMPORT_SIZE=2000;
+
+    public final static String JIEBA_ENTITY_PATH="/data/jieba.dict";
+    public final static String JIEBA_SOUGOU_PATH="/data/sougou.dict";
 }

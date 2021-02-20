@@ -1,6 +1,8 @@
 package cn.edu.nju.kg_qa.service.extractService;
 
+import cn.edu.nju.kg_qa.config.Config;
 import cn.edu.nju.kg_qa.util.Jieba;
+import com.google.common.io.Resources;
 import lombok.extern.flogger.Flogger;
 import org.neo4j.driver.*;
 import org.slf4j.Logger;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -29,6 +32,8 @@ public class ImportDataService implements AutoCloseable {
 
     private static final Driver driver = GraphDatabase.driver("bolt://49.235.238.192:7687",
             AuthTokens.basic("neo4j", "root"));
+//            private static final Driver driver = GraphDatabase.driver("bolt://localhost:7687",
+//            AuthTokens.basic("neo4j", "root"));
 
     @Override
     public void close() throws Exception {
@@ -77,8 +82,8 @@ public class ImportDataService implements AutoCloseable {
         }
     }
 
-    public void importDataForEntity(File entityFile, String entityName) {
-        List<String> entityNameForJieBa = new ArrayList<>();
+    public void importDataForEntity(File entityFile, String entityName, List<String> entityNameForJieBa) {
+
         int indexOfEntityName = -1;
         List<String> lines = null;
         try {
@@ -124,13 +129,10 @@ public class ImportDataService implements AutoCloseable {
                 logger.info("" + transactionNum * 2000 + 1);
             }
         }
-        writeJieBaWords(entityNameForJieBa);
     }
 
-    private void writeJieBaWords(List<String> jieBaWords) {
-        Path path = Paths.get(new File(this.getClass().getClassLoader().
-                getResource("dicts/dicts.dict").getPath()).getAbsolutePath());
-        File dicts = new File(path.toUri());
+    public void writeJieBaWords(List<String> jieBaWords) {
+        File dicts = new File(Config.JIEBA_ENTITY_PATH);
         if (dicts.exists()) {
             dicts.delete();
         }
@@ -141,9 +143,9 @@ public class ImportDataService implements AutoCloseable {
             e.printStackTrace();
         }
         try {
-            FileWriter fileWriter = new FileWriter(dicts);
+            FileWriter fileWriter = new FileWriter(dicts,true);
             for (String s : jieBaWords) {
-                fileWriter.write(s);
+                fileWriter.write(s+"\n");
             }
             fileWriter.flush();
             fileWriter.close();
@@ -153,4 +155,6 @@ public class ImportDataService implements AutoCloseable {
         }
         logger.warn("jieba文件写入成功");
     }
+
+
 }

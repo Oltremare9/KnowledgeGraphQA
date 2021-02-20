@@ -1,17 +1,20 @@
 package cn.edu.nju.kg_qa.service.extractService;
 
+import cn.edu.nju.kg_qa.util.Jieba;
 import lombok.extern.flogger.Flogger;
-import org.neo4j.driver.Driver;
-import org.neo4j.driver.Session;
-import org.neo4j.driver.Transaction;
+import org.neo4j.driver.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,10 +25,19 @@ import java.util.List;
  * @since JDK 11
  */
 @Service
-public class ImportDataService {
+public class ImportDataService implements AutoCloseable {
 
-    private Logger logger= LoggerFactory.getLogger(ImportDataService.class);
-    public void importDataForRelation(File relationFile, String relationName, Driver driver) {
+    private static final Driver driver = GraphDatabase.driver("bolt://49.235.238.192:7687",
+            AuthTokens.basic("neo4j", "root"));
+
+    @Override
+    public void close() throws Exception {
+        driver.close();
+    }
+
+    private Logger logger = LoggerFactory.getLogger(ImportDataService.class);
+
+    public void importDataForRelation(File relationFile, String relationName) {
         List<String> lines = null;
         try {
             lines = Files.readAllLines(relationFile.toPath(),
@@ -50,7 +62,7 @@ public class ImportDataService {
 
                         String[] array = lines.get(i).split(",");
                         String execute = cypher;
-                        if(array.length<2){
+                        if (array.length < 2) {
                             continue;
                         }
                         for (int j = 0; j < 2; j++) {
@@ -65,7 +77,9 @@ public class ImportDataService {
         }
     }
 
-    public void importDataForEntity(File entityFile, String entityName, Driver driver) {
+    public void importDataForEntity(File entityFile, String entityName) {
+        List<String> entityNameForJieBa = new ArrayList<>();
+        int indexOfEntityName = -1;
         List<String> lines = null;
         try {
             lines = Files.readAllLines(entityFile.toPath(),
@@ -84,6 +98,9 @@ public class ImportDataService {
                 cypher += ",";
             }
             cypher += headers[i] + ":value" + i;
+            if (headers[i].equals("name")) {
+                indexOfEntityName = i;
+            }
         }
         cypher += "})";
 
@@ -96,13 +113,44 @@ public class ImportDataService {
                         String execute = cypher;
                         for (int j = 0; j < propertyNum; j++) {
                             execute = execute.replace("value" + j, "'" + array[j] + "'");
+                            if (j == indexOfEntityName) {
+                                entityNameForJieBa.add(array[j]);
+                            }
                         }
                         tx.run(execute);
                     }
                     tx.commit();
                 }
-                logger.info(""+transactionNum * 2000 + 1);
+                logger.info("" + transactionNum * 2000 + 1);
             }
         }
+        writeJieBaWords(entityNameForJieBa);
+    }
+
+    private void writeJieBaWords(List<String> jieBaWords) {
+        Path path = Paths.get(new File(this.getClass().getClassLoader().
+                getResource("dicts/dicts").getPath()).getAbsolutePath());
+        File dicts = new File(path.toUri());
+        if (dicts.exists()) {
+            dicts.delete();
+        }
+        try {
+            dicts.createNewFile();
+        } catch (IOException e) {
+            logger.error("创建jieba分词文件失败");
+            e.printStackTrace();
+        }
+        try {
+            FileWriter fileWriter = new FileWriter(dicts);
+            for (String s : jieBaWords) {
+                fileWriter.write(s);
+            }
+            fileWriter.flush();
+            fileWriter.close();
+        } catch (IOException e) {
+            logger.error("fileWriter创建失败");
+            e.printStackTrace();
+        }
+        logger.warn("jieba文件写入成功");
     }
 }

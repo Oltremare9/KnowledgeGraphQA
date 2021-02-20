@@ -11,7 +11,6 @@ import org.neo4j.driver.GraphDatabase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Profiles;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,19 +27,13 @@ import java.io.File;
 @Api(tags = "导入数据接口")
 @RestController
 @RequestMapping("/importData")
-public class ImportDateController implements AutoCloseable {
+public class ImportDataController {
 
     @Autowired
     ImportDataService importDataService;
 
-    private Logger logger= LoggerFactory.getLogger(ImportDateController.class);
-    private static final Driver driver = GraphDatabase.driver("bolt://49.235.238.192:7687",
-            AuthTokens.basic("neo4j", "root"));
+    private Logger logger = LoggerFactory.getLogger(ImportDataController.class);
 
-    @Override
-    public void close() throws Exception {
-        driver.close();
-    }
 
     @ApiOperation(value = "导入所有实体节点")
     @PostMapping(value = "/importAllEntities")
@@ -60,7 +53,7 @@ public class ImportDateController implements AutoCloseable {
                 logger.error("文件命名错误，不确定是否为entity");
                 continue;
             }
-            importDataService.importDataForEntity(entityFile, entityName,driver);
+            importDataService.importDataForEntity(entityFile, entityName);
         }
         return CommonResult.success(true);
     }
@@ -83,7 +76,7 @@ public class ImportDateController implements AutoCloseable {
                 logger.error("文件命名错误，不确定是否为relation");
                 continue;
             }
-            importDataService.importDataForRelation(relationFile, relationName,driver);
+            importDataService.importDataForRelation(relationFile, relationName);
         }
         return CommonResult.success(true);
     }

@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Description: <br/>
@@ -38,6 +40,7 @@ public class ImportDataController {
     @ApiOperation(value = "导入所有实体节点")
     @PostMapping(value = "/importAllEntities")
     public CommonResult<Boolean> importAllEntity() {
+        List<String> entityNameForJieBa = new ArrayList<>();
         File folder = new File(Config.OUT_CSV_PATH);
         File[] files = folder.listFiles();
         for (File entityFile : files) {
@@ -53,8 +56,9 @@ public class ImportDataController {
                 logger.error("文件命名错误，不确定是否为entity");
                 continue;
             }
-            importDataService.importDataForEntity(entityFile, entityName);
+            importDataService.importDataForEntity(entityFile, entityName, entityNameForJieBa);
         }
+        importDataService.writeJieBaWords(entityNameForJieBa);
         return CommonResult.success(true);
     }
 

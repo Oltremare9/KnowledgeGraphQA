@@ -1,5 +1,6 @@
 package cn.edu.nju.kg_qa.util;
 
+import cn.edu.nju.kg_qa.config.Config;
 import com.huaban.analysis.jieba.JiebaSegmenter;
 import com.huaban.analysis.jieba.SegToken;
 import com.huaban.analysis.jieba.WordDictionary;
@@ -22,6 +23,7 @@ public class Jieba {
     static{
         Path path = Paths.get(new File(Jieba.class.getClassLoader().
                 getResource("dicts/dicts.dict").getPath()).getAbsolutePath());
+        Path path1=new File(Config.JIEBA_SOUGOU_PATH).toPath();
         WordDictionary.getInstance().loadUserDict(path);
     }
 

@@ -24,17 +24,29 @@ import java.util.List;
  */
 public class Jieba {
 
-    static Logger logger = LoggerFactory.getLogger(Jieba.class);
+    Logger logger = LoggerFactory.getLogger(Jieba.class);
 
-    static {
-        Path sougou_path = new File(Config.JIEBA_SOUGOU_PATH).toPath();
-        Path entity_path = new File(Config.JIEBA_ENTITY_PATH).toPath();
+    public Jieba(String s) {
+//        Path sougou_path = new File(Config.JIEBA_SOUGOU_PATH).toPath();
+//        Path entity_path = new File(Config.JIEBA_ENTITY_PATH).toPath();
+        Path sougou_path = new File("C:\\Users\\11346\\Desktop\\temp切分\\jieba\\jieba.dict").toPath();
+        Path entity_path = new File("C:\\Users\\11346\\Desktop\\temp切分\\jieba\\sougou.dict").toPath();
+
         WordDictionary.getInstance().loadUserDict(sougou_path);
         WordDictionary.getInstance().loadUserDict(entity_path);
-        logger.warn("导入停用词表");
     }
 
-    static public List<SegToken> cutSequence(String sentence) {
+    public Jieba() {
+        Path sougou_path = new File(Config.JIEBA_SOUGOU_PATH).toPath();
+        Path entity_path = new File(Config.JIEBA_ENTITY_PATH).toPath();
+//        Path sougou_path = new File("C:\\Users\\11346\\Desktop\\temp切分\\jieba\\jieba.dict").toPath();
+//        Path entity_path = new File("C:\\Users\\11346\\Desktop\\temp切分\\jieba\\sougou.dict").toPath();
+
+        WordDictionary.getInstance().loadUserDict(sougou_path);
+        WordDictionary.getInstance().loadUserDict(entity_path);
+    }
+
+    public List<SegToken> cutSequence(String sentence) {
         logger.info("待切分句子为：" + sentence);
         JiebaSegmenter segmenter = new JiebaSegmenter();
         List<SegToken> res = segmenter.process(sentence, JiebaSegmenter.SegMode.SEARCH);
@@ -42,9 +54,13 @@ public class Jieba {
 
         return res;
     }
+    public static void main(String args[]){
+        Jieba jieba=new Jieba();
+        System.out.println(jieba.cutSequence("崇文书局").toString());
 
+        Jieba jieba2=new Jieba("");
+        System.out.println(jieba2.cutSequence("崇文书局").toString());
 
-    public static void main(String args[]) {
-        Jieba.cutSequence("三联出版社出版商是谁");
     }
+
 }

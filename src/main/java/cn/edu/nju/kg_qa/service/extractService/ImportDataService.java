@@ -145,7 +145,9 @@ public class ImportDataService implements AutoCloseable {
         try {
             FileWriter fileWriter = new FileWriter(dicts,true);
             for (String s : jieBaWords) {
-                fileWriter.write(s+"\n");
+                s=s.replaceAll(" ", "");
+                s=s.replaceAll(" ", "");
+                fileWriter.write(s+"    5\n");
             }
             fileWriter.flush();
             fileWriter.close();

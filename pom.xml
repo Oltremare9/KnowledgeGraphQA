@@ -99,6 +99,17 @@
             <artifactId>neo4j-java-driver</artifactId>
             <version>4.2.0</version>
         </dependency>
+
+        <!-- jieba-->
+        <dependency>
+            <groupId>com.huaban</groupId>
+            <artifactId>jieba-analysis</artifactId>
+            <version>1.0.2</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

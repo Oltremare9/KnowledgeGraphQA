@@ -1,10 +1,14 @@
 package cn.edu.nju.kg_qa.util;
 
 import cn.edu.nju.kg_qa.config.Config;
+import cn.edu.nju.kg_qa.service.extractService.HandleBookSeriesService;
 import com.huaban.analysis.jieba.JiebaSegmenter;
 import com.huaban.analysis.jieba.SegToken;
 import com.huaban.analysis.jieba.WordDictionary;
 import junit.framework.TestCase;
+import lombok.extern.flogger.Flogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -20,30 +24,27 @@ import java.util.List;
  */
 public class Jieba {
 
-    static{
-        Path path = Paths.get(new File(Jieba.class.getClassLoader().
-                getResource("dicts/dicts.dict").getPath()).getAbsolutePath());
-        Path path1=new File(Config.JIEBA_SOUGOU_PATH).toPath();
-        WordDictionary.getInstance().loadUserDict(path);
+    static Logger logger = LoggerFactory.getLogger(Jieba.class);
+
+    static {
+        Path sougou_path = new File(Config.JIEBA_SOUGOU_PATH).toPath();
+        Path entity_path = new File(Config.JIEBA_ENTITY_PATH).toPath();
+        WordDictionary.getInstance().loadUserDict(sougou_path);
+        WordDictionary.getInstance().loadUserDict(entity_path);
+        logger.warn("导入停用词表");
     }
 
-    public List<SegToken> cutSequence(String sentence) {
+    static public List<SegToken> cutSequence(String sentence) {
+        logger.info("待切分句子为：" + sentence);
         JiebaSegmenter segmenter = new JiebaSegmenter();
         List<SegToken> res = segmenter.process(sentence, JiebaSegmenter.SegMode.SEARCH);
-        System.out.println(res.toString());
-
-
-
-        segmenter = new JiebaSegmenter();
-        res = segmenter.process(sentence, JiebaSegmenter.SegMode.SEARCH);
-        System.out.println(res.toString());
+        logger.info("分词结果：" + res.toString());
 
         return res;
     }
 
 
     public static void main(String args[]) {
-        Jieba jieba = new Jieba();
-        jieba.cutSequence("三联出版社出版商是谁");
+        Jieba.cutSequence("三联出版社出版商是谁");
     }
 }

@@ -129,7 +129,7 @@ public class ImportDataService implements AutoCloseable {
 
     private void writeJieBaWords(List<String> jieBaWords) {
         Path path = Paths.get(new File(this.getClass().getClassLoader().
-                getResource("dicts/dicts").getPath()).getAbsolutePath());
+                getResource("dicts/dicts.dict").getPath()).getAbsolutePath());
         File dicts = new File(path.toUri());
         if (dicts.exists()) {
             dicts.delete();

@@ -23,7 +23,8 @@ public class JieBaService {
      * @return
      */
     public List<SegToken> jieBaCutSentence(String sentence) {
-        List<SegToken> list = Jieba.cutSequence(sentence);
+        Jieba jieba=new Jieba();
+        List<SegToken> list = jieba.cutSequence(sentence);
         return list;
     }
 }

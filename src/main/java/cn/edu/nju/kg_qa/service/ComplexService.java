@@ -43,4 +43,8 @@ public class ComplexService {
     public List<BaseNode> findAnyProperNodesByName(String nodeName) {
         return complexNodeRepository.findAnyProperNodesByName(nodeName);
     }
+
+    public List<BaseRelation> findAnyRelationByName(String nodeName){
+        return complexRelationRepository.findAnyRelationByName(nodeName);
+    }
 }

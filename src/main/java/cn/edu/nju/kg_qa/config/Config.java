@@ -12,6 +12,8 @@ import net.bytebuddy.description.modifier.FieldManifestation;
 public class Config {
     public final static String IN_CSV_PATH="/data/origin.csv";
     public final static String OUT_CSV_PATH="/usr/local/neo4j/neo4j-community-4.1.5/import/";
+//    public final static String IN_CSV_PATH="C:\\Users\\11346\\Desktop\\origin.csv";
+//    public final static String OUT_CSV_PATH="C:\\Users\\11346\\Desktop\\temp切分\\";
     public final static int EXTRACT_NUM=10001;
     public final static int BATCH_IMPORT_SIZE=2000;
 

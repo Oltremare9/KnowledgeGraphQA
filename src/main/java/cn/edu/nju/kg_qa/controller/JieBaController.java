@@ -1,6 +1,7 @@
 package cn.edu.nju.kg_qa.controller;
 
 import cn.edu.nju.kg_qa.common.CommonResult;
+import cn.edu.nju.kg_qa.domain.entity.NodeNameAndLabelsData;
 import cn.edu.nju.kg_qa.domain.relation.BelongRelation;
 import cn.edu.nju.kg_qa.service.JieBaService;
 import cn.edu.nju.kg_qa.util.Jieba;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 
@@ -34,5 +36,12 @@ public class JieBaController {
     public CommonResult<List<SegToken>> jieBaCutSentence(@PathVariable String sentence) {
         List<SegToken> list = jieBaService.jieBaCutSentence(sentence);
         return CommonResult.success(list);
+    }
+
+    @ApiIgnore
+    @ApiOperation("根据节点名 右模糊匹配节点全名称+标签")
+    @GetMapping("/getWordLabelAndName/{nodeName}")
+    public CommonResult<List<NodeNameAndLabelsData>> getWordLabelAndName(@PathVariable String nodeName){
+        return CommonResult.success(jieBaService.getWordLabelAndName(nodeName));
     }
 }

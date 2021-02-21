@@ -25,4 +25,12 @@ public interface ComplexRelationRepository extends Neo4jRepository<BaseRelation,
      */
     @Query("Match (p)-[r]-(a) where a.name=$nodeName return p,r,a")
     List<BaseRelation> findAnyProperRelationByName(@Param("nodeName") String nodeName);
+
+    /**
+     * 根据节点名返回所有符合条件的多重关系
+     * @param nodeName
+     * @return
+     */
+    @Query("Match ans=(p)-[r]-(a)-[]-() where p.name=$nodeName return ans")
+    List<BaseRelation> findAnyRelationByName(@Param("nodeName") String nodeName);
 }

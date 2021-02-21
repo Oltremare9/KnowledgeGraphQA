@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 
@@ -35,6 +36,7 @@ public class BookSearchController {
         return CommonResult.success(list);
     }
 
+    @ApiIgnore
     @ApiOperation(value = "查询所有图书")
     @GetMapping("/findAllBooks")
     public CommonResult<List<BookNode>> findAllBooks() {

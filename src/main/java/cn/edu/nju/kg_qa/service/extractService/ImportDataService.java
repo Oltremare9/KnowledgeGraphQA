@@ -43,6 +43,7 @@ public class ImportDataService implements AutoCloseable {
     private Logger logger = LoggerFactory.getLogger(ImportDataService.class);
 
     public void importDataForRelation(File relationFile, String relationName) {
+
         List<String> lines = null;
         try {
             lines = Files.readAllLines(relationFile.toPath(),
@@ -51,6 +52,8 @@ public class ImportDataService implements AutoCloseable {
             logger.error("读取csv文件错误，path：" + relationFile.getAbsolutePath());
             e.printStackTrace();
         }
+        logger.warn("当前处理文件为:{}", relationFile.toString());
+        logger.warn("共计", lines.size());
         String header = lines.get(0);
         String headers[] = header.split(",");
         String label1 = headers[0].split("_")[0];
@@ -73,12 +76,13 @@ public class ImportDataService implements AutoCloseable {
                         for (int j = 0; j < 2; j++) {
                             execute = execute.replace("value" + j, array[j]);
                         }
-                        logger.info(i + "  " + execute);
+
                         tx.run(execute);
                     }
                     tx.commit();
                 }
             }
+            logger.info("当前处理:{}条", transactionNum * 20);
         }
     }
 
@@ -143,11 +147,11 @@ public class ImportDataService implements AutoCloseable {
             e.printStackTrace();
         }
         try {
-            FileWriter fileWriter = new FileWriter(dicts,true);
+            FileWriter fileWriter = new FileWriter(dicts, true);
             for (String s : jieBaWords) {
-                s=s.replaceAll(" ", "");
-                s=s.replaceAll(" ", "");
-                fileWriter.write(s+"    5\n");
+                s = s.replaceAll(" ", "");
+                s = s.replaceAll(" ", "");
+                fileWriter.write(s + "    5\n");
             }
             fileWriter.flush();
             fileWriter.close();

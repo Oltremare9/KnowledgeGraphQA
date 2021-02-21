@@ -67,7 +67,7 @@ public class HandleAuthorService {
         }
         this.putIntoAuthorMap(author);
         write_Relation.add(author + "!" + isbn);
-        extractAssistant(author, assistant);
+        extractAssistant(isbn, assistant);
     }
 
     /**
@@ -95,7 +95,7 @@ public class HandleAuthorService {
         return author;
     }
 
-    private void extractAssistant(String author, String assistant) {
+    private void extractAssistant(String isbn, String assistant) {
         if (null == assistant || "".equals(assistant.trim())) {
             return;
         }
@@ -124,7 +124,7 @@ public class HandleAuthorService {
                 return;
             }
             this.putIntoAuthorMap(assist);
-            assist_Relation.put(assist + "!" + author, "");
+            assist_Relation.put(assist + "!" + isbn, "");
         }
     }
 
@@ -345,7 +345,7 @@ public class HandleAuthorService {
         }
         CsvWriter cWriter = new CsvWriter(writer, ',');
         try {
-            cWriter.writeRecord("author_name,author_name".split(","), true);
+            cWriter.writeRecord("author_name,book_id".split(","), true);
         } catch (IOException e) {
             System.out.println("e:写入表头失败");
             e.printStackTrace();

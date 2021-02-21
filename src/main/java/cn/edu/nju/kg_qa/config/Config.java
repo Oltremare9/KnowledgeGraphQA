@@ -19,4 +19,6 @@ public class Config {
 
     public final static String JIEBA_ENTITY_PATH="/data/jieba.dict";
     public final static String JIEBA_SOUGOU_PATH="/data/sougou.dict";
+//    public final static String JIEBA_ENTITY_PATH="C:\\Users\\11346\\Desktop\\temp切分\\jieba\\jieba.dict";
+//    public final static String JIEBA_SOUGOU_PATH="C:\\Users\\11346\\Desktop\\temp切分\\jieba\\sougou.dict";
 }

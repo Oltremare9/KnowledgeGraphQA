@@ -1,13 +1,12 @@
-package cn.edu.nju.kg_qa.service;
+package cn.edu.nju.kg_qa.service.impl;
 
-import cn.edu.nju.kg_qa.common.CommonResult;
-import cn.edu.nju.kg_qa.domain.entity.NodeNameAndLabelsData;
+import cn.edu.nju.kg_qa.domain.response.NodeNameAndLabelsResponse;
 import cn.edu.nju.kg_qa.repository.JieBaRepository;
+import cn.edu.nju.kg_qa.service.qaService.JieBaService;
 import cn.edu.nju.kg_qa.util.Jieba;
 import com.huaban.analysis.jieba.SegToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -19,7 +18,7 @@ import java.util.List;
  * @since JDK 11
  */
 @Service
-public class JieBaService {
+public class JieBaServiceImpl implements JieBaService {
     @Autowired
     JieBaRepository jieBaRepository;
     /**
@@ -27,6 +26,7 @@ public class JieBaService {
      * @param sentence
      * @return
      */
+    @Override
     public List<SegToken> jieBaCutSentence(String sentence) {
         Jieba jieba=new Jieba();
         List<SegToken> list = jieba.cutSequence(sentence);
@@ -38,7 +38,8 @@ public class JieBaService {
      * @param nodeName
      * @return
      */
-    public List<NodeNameAndLabelsData> getWordLabelAndName(String nodeName){
+    @Override
+    public List<NodeNameAndLabelsResponse> getWordLabelAndName(String nodeName){
         return jieBaRepository.getWordLabelAndName(nodeName);
     }
 }

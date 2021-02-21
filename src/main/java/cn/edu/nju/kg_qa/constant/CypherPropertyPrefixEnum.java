@@ -7,7 +7,7 @@ package cn.edu.nju.kg_qa.constant;
  * @author HaoNanWang<br />
  * @since JDK 11
  */
-public enum CypherPropertyPrefix {
+public enum CypherPropertyPrefixEnum {
 
     LABEL_AUTHOR("author"),
     LABEL_BOOK("book"),
@@ -23,7 +23,7 @@ public enum CypherPropertyPrefix {
 
     private String propertyName;
 
-    CypherPropertyPrefix(String propertyName) {
+    CypherPropertyPrefixEnum(String propertyName) {
         this.propertyName = propertyName;
     }
 

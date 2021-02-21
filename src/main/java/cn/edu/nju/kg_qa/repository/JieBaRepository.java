@@ -1,7 +1,7 @@
 package cn.edu.nju.kg_qa.repository;
 
 import cn.edu.nju.kg_qa.domain.base.BaseRelation;
-import cn.edu.nju.kg_qa.domain.entity.NodeNameAndLabelsData;
+import cn.edu.nju.kg_qa.domain.response.NodeNameAndLabelsResponse;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.data.repository.query.Param;
@@ -19,6 +19,6 @@ import java.util.List;
 @Repository
 public interface JieBaRepository  extends Neo4jRepository<BaseRelation,Long> {
 
-    @Query("Match (p) where p.name=~ $nodeName+'.*' return distinct(labels(p)) as label ,p.name as nodeName")
-    List<NodeNameAndLabelsData> getWordLabelAndName(@Param("nodeName") String nodeName);
+    @Query("Match (p) where p.name=~ $nodeName+'.*' return distinct(labels(p)) as label ,p.name as nodeName,id(p) as id")
+    List<NodeNameAndLabelsResponse> getWordLabelAndName(@Param("nodeName") String nodeName);
 }

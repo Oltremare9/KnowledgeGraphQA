@@ -7,19 +7,19 @@ package cn.edu.nju.kg_qa.constant;
  * @author HaoNanWang<br />
  * @since JDK 11
  */
-public enum PresetQuestion {
-    WHO_ASSIST_SOMEONE(1,CypherPropertyPrefix.LABEL_AUTHOR.getPropertyName(),
+public enum PresetQuestionEnum {
+    WHO_ASSIST_SOMEONE(1, CypherPropertyPrefixEnum.LABEL_AUTHOR.getPropertyName(),
             "[]与谁有合作关系？"),
-    WHO_BELONG_TO_NATION(2,CypherPropertyPrefix.LABEL_AUTHOR.getPropertyName(),
+    WHO_BELONG_TO_NATION(2, CypherPropertyPrefixEnum.LABEL_AUTHOR.getPropertyName(),
             "[]是什么时代的人？"),
-    WHO_WRITE_BOOK(3,CypherPropertyPrefix.LABEL_AUTHOR.getPropertyName(),
+    WHO_WRITE_BOOK(3, CypherPropertyPrefixEnum.LABEL_AUTHOR.getPropertyName(),
             "[]写了哪些书？"),
-    WHO_COOPERATE_INSTITUTE(4,CypherPropertyPrefix.LABEL_AUTHOR.getPropertyName(),
+    WHO_COOPERATE_INSTITUTE(4, CypherPropertyPrefixEnum.LABEL_AUTHOR.getPropertyName(),
             "[]与哪些出版社有合作？");
 
 
 
-    PresetQuestion(Integer id, String startLabel, String questionDescription) {
+    PresetQuestionEnum(Integer id, String startLabel, String questionDescription) {
         this.id = id;
         this.startLabel = startLabel;
         this.questionDescription = questionDescription;

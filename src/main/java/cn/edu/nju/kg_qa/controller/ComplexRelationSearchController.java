@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 
@@ -34,4 +35,14 @@ public class ComplexRelationSearchController {
         List<BaseRelation> list = complexService.findAnyProperRelationByName(nodeName);
         return CommonResult.success(list);
     }
+
+    @ApiIgnore
+    @ApiOperation("根据节点名返回所有符合条件的多重关系")
+    @GetMapping("/findAnyRelationByName/{nodeName}")
+    public CommonResult<List<BaseRelation>> findAnyRelationByName(@PathVariable String nodeName) {
+        List<BaseRelation> list = complexService.findAnyRelationByName(nodeName);
+        return CommonResult.success(list);
+    }
+
+
 }

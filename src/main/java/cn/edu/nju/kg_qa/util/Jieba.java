@@ -26,16 +26,6 @@ public class Jieba {
 
     Logger logger = LoggerFactory.getLogger(Jieba.class);
 
-    public Jieba(String s) {
-//        Path sougou_path = new File(Config.JIEBA_SOUGOU_PATH).toPath();
-//        Path entity_path = new File(Config.JIEBA_ENTITY_PATH).toPath();
-        Path sougou_path = new File("C:\\Users\\11346\\Desktop\\temp切分\\jieba\\jieba.dict").toPath();
-        Path entity_path = new File("C:\\Users\\11346\\Desktop\\temp切分\\jieba\\sougou.dict").toPath();
-
-        WordDictionary.getInstance().loadUserDict(sougou_path);
-        WordDictionary.getInstance().loadUserDict(entity_path);
-    }
-
     public Jieba() {
         Path sougou_path = new File(Config.JIEBA_SOUGOU_PATH).toPath();
         Path entity_path = new File(Config.JIEBA_ENTITY_PATH).toPath();
@@ -49,7 +39,7 @@ public class Jieba {
     public List<SegToken> cutSequence(String sentence) {
         logger.info("待切分句子为：" + sentence);
         JiebaSegmenter segmenter = new JiebaSegmenter();
-        List<SegToken> res = segmenter.process(sentence, JiebaSegmenter.SegMode.SEARCH);
+        List<SegToken> res = segmenter.process(sentence, JiebaSegmenter.SegMode.INDEX);
         logger.info("分词结果：" + res.toString());
 
         return res;
@@ -58,8 +48,6 @@ public class Jieba {
         Jieba jieba=new Jieba();
         System.out.println(jieba.cutSequence("崇文书局").toString());
 
-        Jieba jieba2=new Jieba("");
-        System.out.println(jieba2.cutSequence("崇文书局").toString());
 
     }
 

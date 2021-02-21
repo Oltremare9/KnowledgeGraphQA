@@ -8,17 +8,16 @@ import org.neo4j.ogm.annotation.Property;
 
 /**
  * Description: <br/>
- * date: 2021/2/17 22:13<br/>
+ * date: 2021/2/17 22:15<br/>
  *
  * @author HaoNanWang<br />
  * @since JDK 11
  */
-
-@ApiModel(value = "城市实体")
-@NodeEntity(label = "city")
-public class City extends BaseNode {
+@ApiModel(value = "国籍、朝代实体")
+@NodeEntity(label = "nation")
+public class NationNode extends BaseNode {
     @Property
-    @ApiModelProperty(value = "系列丛书名")
+    @ApiModelProperty(value = "国籍名/朝代名")
     private String name;
 
     public String getName() {
@@ -34,19 +33,19 @@ public class City extends BaseNode {
     }
 
     public void setLabel(String label) {
-        this.label = "city";
+        this.label = "nation";
     }
 
     @ApiModelProperty(value = "节点类别")
     private String label;
 
 
-    public City(String name, String label) {
+    public NationNode(String name, String label) {
         this.name = name;
         this.setLabel("");
     }
 
-    public City() {
+    public NationNode() {
         this.setLabel("");
     }
 }

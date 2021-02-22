@@ -1,7 +1,7 @@
 package cn.edu.nju.kg_qa.controller;
 
 import cn.edu.nju.kg_qa.common.CommonResult;
-import cn.edu.nju.kg_qa.domain.response.NodeNameAndLabelsResponse;
+import cn.edu.nju.kg_qa.domain.dto.NodeNameAndLabelsDto;
 import cn.edu.nju.kg_qa.service.qaService.JieBaService;
 import com.huaban.analysis.jieba.SegToken;
 import io.swagger.annotations.Api;
@@ -29,7 +29,7 @@ public class JieBaController {
     JieBaService jieBaService;
 
     @ApiOperation("根据输入句子 进行分词")
-    @GetMapping("/findBelongToRelationByConceptName/{sentence}")
+    @GetMapping("/jieBaCutSentence/{sentence}")
     public CommonResult<List<SegToken>> jieBaCutSentence(@PathVariable String sentence) {
         List<SegToken> list = jieBaService.jieBaCutSentence(sentence);
         return CommonResult.success(list);
@@ -37,7 +37,7 @@ public class JieBaController {
 
     @ApiOperation("根据节点名 右模糊匹配节点全名称+标签")
     @GetMapping("/getWordLabelAndName/{nodeName}")
-    public CommonResult<List<NodeNameAndLabelsResponse>> getWordLabelAndName(@PathVariable String nodeName){
+    public CommonResult<List<NodeNameAndLabelsDto>> getWordLabelAndName(@PathVariable String nodeName){
         return CommonResult.success(jieBaService.getWordLabelAndName(nodeName));
     }
 }

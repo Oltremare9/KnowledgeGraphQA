@@ -1,6 +1,6 @@
 package cn.edu.nju.kg_qa.service.qaService;
 
-import cn.edu.nju.kg_qa.domain.response.NodeNameAndLabelsResponse;
+import cn.edu.nju.kg_qa.domain.dto.NodeNameAndLabelsDto;
 import com.huaban.analysis.jieba.SegToken;
 
 import java.util.List;
@@ -26,5 +26,5 @@ public interface JieBaService {
      * @param nodeName
      * @return
      */
-    public List<NodeNameAndLabelsResponse> getWordLabelAndName(String nodeName);
+    public List<NodeNameAndLabelsDto> getWordLabelAndName(String nodeName);
 }

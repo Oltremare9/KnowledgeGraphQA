@@ -7,7 +7,7 @@ package cn.edu.nju.kg_qa.constant;
  * @author HaoNanWang<br />
  * @since JDK 11
  */
-public enum CypherPropertyPrefixEnum {
+public enum CypherArgsEnum {
 
     LABEL_AUTHOR("author"),
     LABEL_BOOK("book"),
@@ -16,14 +16,26 @@ public enum CypherPropertyPrefixEnum {
     LABEL_CONCEPT("concept"),
     LABEL_INSTITUTE("institute"),
     LABEL_NATION("nation"),
+    LABEL_DIRECTION("researchDirection"),
+    LABEL_COMPANY("company"),
 
-    PROPERTY_LIMIT("limitProperty"),
-    PROPERTY_SKIP("skipProperty"),
-    PROPERTY_NAME("nameProperty");
+
+    RELATION_WRITE("write"),
+    RELATION_ASSIT("assist"),
+    RELATION_BELONG("belongTo"),
+    RELATION_HUMANOF("humanOf"),
+    RELATION_LOCATEIN("locateIn"),
+    RELATION_PUBLISH("publish"),
+    RELATION_SUBBOOK("subBookOf"),
+    RELATION_MONTH("publishMonth"),
+    RELATION_YEAR("publishYear"),
+    RELATION_BORN("born"),
+    RELATION_SPECIALIZE("specialize"),
+    RELATION_WORDIN("workIn");
 
     private String propertyName;
 
-    CypherPropertyPrefixEnum(String propertyName) {
+    CypherArgsEnum(String propertyName) {
         this.propertyName = propertyName;
     }
 

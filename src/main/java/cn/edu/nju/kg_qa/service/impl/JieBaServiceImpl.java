@@ -1,6 +1,6 @@
 package cn.edu.nju.kg_qa.service.impl;
 
-import cn.edu.nju.kg_qa.domain.response.NodeNameAndLabelsResponse;
+import cn.edu.nju.kg_qa.domain.dto.NodeNameAndLabelsDto;
 import cn.edu.nju.kg_qa.repository.JieBaRepository;
 import cn.edu.nju.kg_qa.service.qaService.JieBaService;
 import cn.edu.nju.kg_qa.util.Jieba;
@@ -8,6 +8,7 @@ import com.huaban.analysis.jieba.SegToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -39,7 +40,10 @@ public class JieBaServiceImpl implements JieBaService {
      * @return
      */
     @Override
-    public List<NodeNameAndLabelsResponse> getWordLabelAndName(String nodeName){
+    public List<NodeNameAndLabelsDto> getWordLabelAndName(String nodeName){
+        if(nodeName.length()<2){
+            return new ArrayList<>();
+        }
         return jieBaRepository.getWordLabelAndName(nodeName);
     }
 }

@@ -7,6 +7,7 @@ import lombok.extern.flogger.Flogger;
 import org.neo4j.driver.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -28,22 +29,31 @@ import java.util.List;
  * @since JDK 11
  */
 @Service
-public class ImportDataService implements AutoCloseable {
+public class ImportDataService {
 
-    private static final Driver driver = GraphDatabase.driver("bolt://49.235.238.192:7687",
-            AuthTokens.basic("neo4j", "root"));
-//            private static final Driver driver = GraphDatabase.driver("bolt://localhost:7687",
-//            AuthTokens.basic("neo4j", "root"));
+    @Value("${spring.data.neo4j.uri}")
+    private static String uri;
 
-    @Override
-    public void close() throws Exception {
-        driver.close();
+
+    @Value("${spring.data.neo4j.username}")
+    private static String username;
+
+
+    @Value("${spring.data.neo4j.password}")
+    private static String password;
+
+//    private static final Driver driver = GraphDatabase.driver(uri,
+//            AuthTokens.basic(username, password));
+
+
+    public Driver createDrive(){
+        return GraphDatabase.driver( uri, AuthTokens.basic(username, password) );
     }
 
     private Logger logger = LoggerFactory.getLogger(ImportDataService.class);
 
     public void importDataForRelation(File relationFile, String relationName) {
-
+        Driver driver=createDrive();
         List<String> lines = null;
         try {
             lines = Files.readAllLines(relationFile.toPath(),
@@ -84,10 +94,11 @@ public class ImportDataService implements AutoCloseable {
             }
             logger.info("当前处理:{}条", transactionNum * 20);
         }
+        driver.close();
     }
 
     public void importDataForEntity(File entityFile, String entityName, List<String> entityNameForJieBa) {
-
+        Driver driver=createDrive();
         int indexOfEntityName = -1;
         List<String> lines = null;
         try {
@@ -133,6 +144,7 @@ public class ImportDataService implements AutoCloseable {
                 logger.info("" + transactionNum * 2000 + 1);
             }
         }
+        driver.close();
     }
 
     public void writeJieBaWords(List<String> jieBaWords) {

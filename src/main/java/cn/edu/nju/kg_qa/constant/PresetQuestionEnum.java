@@ -8,22 +8,22 @@ package cn.edu.nju.kg_qa.constant;
  * @since JDK 11
  */
 public enum PresetQuestionEnum {
-    WHO_BELONG_TO_NATION(1, CypherArgsEnum.LABEL_AUTHOR.getPropertyName(),CypherArgsEnum.LABEL_NATION.getPropertyName(),
+    AUTHOR_BELONG_TO_NATION(1, CypherArgsEnum.LABEL_AUTHOR.getPropertyName(),CypherArgsEnum.LABEL_NATION.getPropertyName(),
             CypherArgsEnum.RELATION_HUMANOF.getPropertyName(),
             "[]是什么时代（国家）的人？"),
-    WHO_WRITE_BOOK(2, CypherArgsEnum.LABEL_AUTHOR.getPropertyName(),CypherArgsEnum.LABEL_BOOK.getPropertyName(),
+    AUTHOR_WRITE_BOOK(2, CypherArgsEnum.LABEL_AUTHOR.getPropertyName(),CypherArgsEnum.LABEL_BOOK.getPropertyName(),
             CypherArgsEnum.RELATION_WRITE.getPropertyName(),
             "[]写了哪些书？"),
-    WHO_ASSIST_BOOK(3, CypherArgsEnum.LABEL_AUTHOR.getPropertyName(),CypherArgsEnum.LABEL_BOOK.getPropertyName(),
+    AUTHOR_ASSIST_BOOK(3, CypherArgsEnum.LABEL_AUTHOR.getPropertyName(),CypherArgsEnum.LABEL_BOOK.getPropertyName(),
             CypherArgsEnum.RELATION_ASSIT.getPropertyName(),
             "[]协助完成了哪些书？"),
-    WHO_BORN_CITY(4, CypherArgsEnum.LABEL_AUTHOR.getPropertyName(),CypherArgsEnum.LABEL_CITY.getPropertyName(),
+    AUTHOR_BORN_CITY(4, CypherArgsEnum.LABEL_AUTHOR.getPropertyName(),CypherArgsEnum.LABEL_CITY.getPropertyName(),
             CypherArgsEnum.RELATION_BORN.getPropertyName(),
             "[]的籍贯是？"),
-    WHO_SPECIALIZE_DIRECTION(5,CypherArgsEnum.LABEL_AUTHOR.getPropertyName(),CypherArgsEnum.LABEL_DIRECTION.getPropertyName(),
+    AUTHOR_SPECIALIZE_DIRECTION(5,CypherArgsEnum.LABEL_AUTHOR.getPropertyName(),CypherArgsEnum.LABEL_DIRECTION.getPropertyName(),
             CypherArgsEnum.RELATION_SPECIALIZE.getPropertyName(),
             "[]的研究方向是？"),
-    WHO_WORKIN_COMPANY(6,CypherArgsEnum.LABEL_AUTHOR.getPropertyName(),CypherArgsEnum.LABEL_COMPANY.getPropertyName(),
+    AUTHOR_WORKIN_COMPANY(6,CypherArgsEnum.LABEL_AUTHOR.getPropertyName(),CypherArgsEnum.LABEL_COMPANY.getPropertyName(),
             CypherArgsEnum.RELATION_WORDIN.getPropertyName(),
             "[]任职于何处"),
 
@@ -41,7 +41,39 @@ public enum PresetQuestionEnum {
 
     CITY_BORN_AUTHOR(10,CypherArgsEnum.LABEL_CITY.getPropertyName(),CypherArgsEnum.LABEL_AUTHOR.getPropertyName(),
             CypherArgsEnum.RELATION_BORN.getPropertyName(),
-            "还有哪些人也是[]人？");
+            "还有哪些人也是[]人？"),
+
+    BOOK_WRITE_AUTHOR(11,CypherArgsEnum.LABEL_BOOK.getPropertyName(),CypherArgsEnum.LABEL_AUTHOR.getPropertyName(),
+            CypherArgsEnum.RELATION_WRITE.getPropertyName(),
+            "[]是谁写的？"),
+
+    BOOK_ASSIST_AUTHOR(12,CypherArgsEnum.LABEL_BOOK.getPropertyName(),CypherArgsEnum.LABEL_AUTHOR.getPropertyName(),
+            CypherArgsEnum.RELATION_ASSIT.getPropertyName(),
+            "[]由谁协助完成？"),
+
+    BOOK_PUBLISH_INSTITUTE(13,CypherArgsEnum.LABEL_BOOK.getPropertyName(),CypherArgsEnum.LABEL_INSTITUTE.getPropertyName(),
+            CypherArgsEnum.RELATION_PUBLISH.getPropertyName(),
+            "[]是由哪家出版社出版？"),
+
+    INSTITUTE_PUBLISH_BOOK(14,CypherArgsEnum.LABEL_INSTITUTE.getPropertyName(),CypherArgsEnum.LABEL_BOOK.getPropertyName(),
+            CypherArgsEnum.RELATION_PUBLISH.getPropertyName(),
+            "[]出版了哪些书？"),
+
+    BOOKSERIES_SUB_BOOK(15,CypherArgsEnum.LABEL_BOOKSERIES.getPropertyName(),CypherArgsEnum.LABEL_BOOK.getPropertyName(),
+            CypherArgsEnum.RELATION_SUBBOOK.getPropertyName(),
+            "[]系列下还有哪些书？"),
+
+    BOOK_SUB_BOOKSEIRES(16,CypherArgsEnum.LABEL_BOOK.getPropertyName(),CypherArgsEnum.LABEL_BOOKSERIES.getPropertyName(),
+            CypherArgsEnum.RELATION_SUBBOOK.getPropertyName(),
+            "[]隶属于什么系列？"),
+
+    CONCEPT_BELONG_BOOK(17,CypherArgsEnum.LABEL_CONCEPT.getPropertyName(),CypherArgsEnum.LABEL_BOOK.getPropertyName(),
+            CypherArgsEnum.RELATION_BELONG.getPropertyName(),
+            "[]领域下有哪些书？"),
+
+    BOOK_BELONG_CONCEPT(18,CypherArgsEnum.LABEL_BOOK.getPropertyName(),CypherArgsEnum.LABEL_CONCEPT.getPropertyName(),
+            CypherArgsEnum.RELATION_BELONG.getPropertyName(),
+            "[]属于哪个分类？");
 
 
     private Integer qid;

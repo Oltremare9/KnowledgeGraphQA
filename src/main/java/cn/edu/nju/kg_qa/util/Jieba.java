@@ -29,8 +29,6 @@ public class Jieba {
     public Jieba() {
         Path sougou_path = new File(Config.JIEBA_SOUGOU_PATH).toPath();
         Path entity_path = new File(Config.JIEBA_ENTITY_PATH).toPath();
-//        Path sougou_path = new File("C:\\Users\\11346\\Desktop\\temp切分\\jieba\\jieba.dict").toPath();
-//        Path entity_path = new File("C:\\Users\\11346\\Desktop\\temp切分\\jieba\\sougou.dict").toPath();
 
         WordDictionary.getInstance().loadUserDict(sougou_path);
         WordDictionary.getInstance().loadUserDict(entity_path);
@@ -39,7 +37,7 @@ public class Jieba {
     public List<SegToken> cutSequence(String sentence) {
         logger.info("待切分句子为：" + sentence);
         JiebaSegmenter segmenter = new JiebaSegmenter();
-        List<SegToken> res = segmenter.process(sentence, JiebaSegmenter.SegMode.INDEX);
+        List<SegToken> res = segmenter.process(sentence, JiebaSegmenter.SegMode.SEARCH);
         logger.info("分词结果：" + res.toString());
 
         return res;

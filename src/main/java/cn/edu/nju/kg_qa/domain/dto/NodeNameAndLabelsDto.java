@@ -1,4 +1,4 @@
-package cn.edu.nju.kg_qa.domain.response;
+package cn.edu.nju.kg_qa.domain.dto;
 
 import org.neo4j.ogm.annotation.Labels;
 import org.springframework.data.neo4j.annotation.QueryResult;
@@ -15,7 +15,7 @@ import java.util.ArrayList;
  */
 
 @QueryResult
-public class NodeNameAndLabelsResponse {
+public class NodeNameAndLabelsDto {
     private String nodeName;
 
     private ArrayList<String> label;
@@ -27,7 +27,6 @@ public class NodeNameAndLabelsResponse {
     public void setNodeName(String nodeName) {
         this.nodeName = nodeName;
     }
-
 
     public Integer id;
 
@@ -45,5 +44,15 @@ public class NodeNameAndLabelsResponse {
 
     public void setLabel(ArrayList<String> label) {
         this.label = label;
+    }
+
+    private String relationType;
+
+    public String getRelationType() {
+        return relationType;
+    }
+
+    public void setRelationType(String relationType) {
+        this.relationType = relationType;
     }
 }

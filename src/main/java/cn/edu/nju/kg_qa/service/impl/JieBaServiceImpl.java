@@ -1,6 +1,6 @@
 package cn.edu.nju.kg_qa.service.impl;
 
-import cn.edu.nju.kg_qa.domain.response.NodeNameAndLabelsResponse;
+import cn.edu.nju.kg_qa.domain.dto.NodeNameAndLabelsDto;
 import cn.edu.nju.kg_qa.repository.JieBaRepository;
 import cn.edu.nju.kg_qa.service.qaService.JieBaService;
 import cn.edu.nju.kg_qa.util.Jieba;
@@ -39,7 +39,7 @@ public class JieBaServiceImpl implements JieBaService {
      * @return
      */
     @Override
-    public List<NodeNameAndLabelsResponse> getWordLabelAndName(String nodeName){
+    public List<NodeNameAndLabelsDto> getWordLabelAndName(String nodeName){
         return jieBaRepository.getWordLabelAndName(nodeName);
     }
 }

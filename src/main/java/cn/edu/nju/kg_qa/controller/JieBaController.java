@@ -35,7 +35,7 @@ public class JieBaController {
         return CommonResult.success(list);
     }
 
-    @ApiOperation("根据节点名 右模糊匹配节点全名称+标签")
+    @ApiOperation("根据节点名 右模糊匹配节点全名称+标签+存在的关系")
     @GetMapping("/getWordLabelAndName/{nodeName}")
     public CommonResult<List<NodeNameAndLabelsDto>> getWordLabelAndName(@PathVariable String nodeName){
         return CommonResult.success(jieBaService.getWordLabelAndName(nodeName));

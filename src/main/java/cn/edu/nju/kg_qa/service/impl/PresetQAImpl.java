@@ -1,5 +1,6 @@
 package cn.edu.nju.kg_qa.service.impl;
 
+import cn.edu.nju.kg_qa.component.DataCache;
 import cn.edu.nju.kg_qa.constant.PresetQuestionEnum;
 import cn.edu.nju.kg_qa.domain.dto.NodeNameAndLabelsDto;
 import cn.edu.nju.kg_qa.domain.response.PresetQuestionResponse;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Description: <br/>
@@ -22,8 +24,8 @@ import java.util.List;
  * @since JDK 11
  */
 @Service
-public class PresetQAServiceImpl implements PresetQAService {
-    private Logger logger= LoggerFactory.getLogger(PresetQAServiceImpl.class);
+public class PresetQAImpl implements PresetQAService {
+    private Logger logger= LoggerFactory.getLogger(PresetQAImpl.class);
 
     @Autowired
     JieBaService jieBaService;
@@ -59,7 +61,8 @@ public class PresetQAServiceImpl implements PresetQAService {
                         logger.error("字段为空");
                         break;
                     }
-                    for(PresetQuestionEnum presetQuestionEnum:PresetQuestionEnum.values()){
+                    for(Map.Entry entry: DataCache.presetQuestionEnumMap.entrySet()){
+                        PresetQuestionEnum presetQuestionEnum= (PresetQuestionEnum) entry.getValue();
                         if(presetQuestionEnum.getSrcNodeType().equals(label)) {
                             if (presetQuestionEnum.getQid()>100 || presetQuestionEnum.getRelationName().equals(relationType)) {
                                 PresetQuestionResponse response = new PresetQuestionResponse();

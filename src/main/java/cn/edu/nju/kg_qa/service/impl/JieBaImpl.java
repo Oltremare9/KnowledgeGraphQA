@@ -19,7 +19,7 @@ import java.util.List;
  * @since JDK 11
  */
 @Service
-public class JieBaServiceImpl implements JieBaService {
+public class JieBaImpl implements JieBaService {
     @Autowired
     JieBaRepository jieBaRepository;
     /**

@@ -7,6 +7,7 @@ package cn.edu.nju.kg_qa.constant;
  * @author HaoNanWang<br />
  * @since JDK 11
  */
+
 public enum PresetQuestionEnum {
     AUTHOR_BELONG_TO_NATION(1, CypherArgsEnum.LABEL_AUTHOR.getPropertyName(),CypherArgsEnum.LABEL_NATION.getPropertyName(),
             CypherArgsEnum.RELATION_HUMANOF.getPropertyName(),

@@ -8,6 +8,7 @@ import com.huaban.analysis.jieba.SegToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -40,6 +41,9 @@ public class JieBaServiceImpl implements JieBaService {
      */
     @Override
     public List<NodeNameAndLabelsDto> getWordLabelAndName(String nodeName){
+        if(nodeName.length()<2){
+            return new ArrayList<>();
+        }
         return jieBaRepository.getWordLabelAndName(nodeName);
     }
 }

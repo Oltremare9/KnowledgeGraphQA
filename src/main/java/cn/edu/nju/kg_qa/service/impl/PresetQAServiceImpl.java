@@ -33,11 +33,14 @@ public class PresetQAServiceImpl implements PresetQAService {
         List<SegToken> tokens=jieBaService.jieBaCutSentence(userInput);
         List<NodeNameAndLabelsDto> list=new ArrayList<>();
         List<PresetQuestionResponse> res=new ArrayList<>();
-        for(SegToken segToken:tokens){
-            String nodePrefix=segToken.word;
+        for(int i=tokens.size()-1;i>=0;i--){
+            String nodePrefix="";
+            for(int j=0;j<=i;j++){
+                nodePrefix+=tokens.get(j).word;
+            }
             list=jieBaService.getWordLabelAndName(nodePrefix);
             //不是特定图谱内节点
-            if(list.size()==0){
+            if(null==list || list.size()==0){
                 continue;
             }else {
                 //todo 根据node热度进行排序

@@ -17,8 +17,8 @@ public class Config {
     public final static int EXTRACT_NUM=10001;
     public final static int BATCH_IMPORT_SIZE=2000;
 
-//    public final static String JIEBA_ENTITY_PATH="/data/jieba.dict";
-//    public final static String JIEBA_SOUGOU_PATH="/data/sougou.dict";
-    public final static String JIEBA_ENTITY_PATH="C:\\Users\\11346\\Desktop\\temp切分\\jieba\\jieba.dict";
-    public final static String JIEBA_SOUGOU_PATH="C:\\Users\\11346\\Desktop\\temp切分\\jieba\\sougou.dict";
+    public final static String JIEBA_ENTITY_PATH="/data/jieba.dict";
+    public final static String JIEBA_SOUGOU_PATH="/data/sougou.dict";
+//    public final static String JIEBA_ENTITY_PATH="C:\\Users\\11346\\Desktop\\temp切分\\jieba\\jieba.dict";
+//    public final static String JIEBA_SOUGOU_PATH="C:\\Users\\11346\\Desktop\\temp切分\\jieba\\sougou.dict";
 }

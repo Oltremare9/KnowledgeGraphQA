@@ -134,4 +134,15 @@ public enum PresetQuestionEnum {
         this.relationName = relationName;
         this.questionDescription = questionDescription;
     }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "qid=" + qid +
+                ", srcNodeType='" + srcNodeType + '\'' +
+                ", dstNodeType='" + dstNodeType + '\'' +
+                ", relationName='" + relationName + '\'' +
+                ", questionDescription='" + questionDescription + '\'' +
+                '}';
+    }
 }

@@ -33,30 +33,29 @@ import java.util.List;
 @RestController
 @RequestMapping("/oneHopSearch")
 public class OneHopRelationSearchController {
-    private Logger logger= LoggerFactory.getLogger(OneHopRelationSearchController.class);
+    private Logger logger = LoggerFactory.getLogger(OneHopRelationSearchController.class);
 
     @Autowired
     OneHopRelationSearchService oneHopRelationSearchService;
 
     @ApiOperation(value = "根据qid，nodeId返回相关单跳关系")
     @PostMapping("/oneHopSearch")
-    public CommonResult<Object> oneHopSearch(@Validated OneHopRequest oneHopRequest, BindingResult bindingResult){
-        List<BaseRelation> res=new ArrayList<>();
-        if(bindingResult.hasErrors()){
+    public CommonResult<Object> oneHopSearch(@Validated OneHopRequest oneHopRequest, BindingResult bindingResult) {
+        List<BaseRelation> res = new ArrayList<>();
+        if (bindingResult.hasErrors()) {
             return CommonResult.failed(bindingResult.getFieldError().getDefaultMessage());
         }
-        String nodeName=oneHopRequest.getNodeName();
-        Integer qid=oneHopRequest.getQid();
-        Integer nodeId=oneHopRequest.getNodeId();
-        if(!DataCache.presetQuestionEnumMap.containsKey(qid)){
+        String nodeName = oneHopRequest.getNodeName();
+        Integer qid = oneHopRequest.getQid();
+        Integer nodeId = oneHopRequest.getNodeId();
+        if (!DataCache.presetQuestionEnumMap.containsKey(qid)) {
             return CommonResult.failed("qid不存在");
         }
-        //todo 分页
-        Integer skip=0;
-        if(oneHopRequest.getSkip()!=null){
-            skip=oneHopRequest.getSkip()* Config.limit;
+        Integer skip = 0;
+        if (oneHopRequest.getSkip() != null) {
+            skip = oneHopRequest.getSkip() * Config.limit;
         }
-        res=oneHopRelationSearchService.oneHopRelationSearch(nodeName,nodeId,qid);
+        res = oneHopRelationSearchService.oneHopRelationSearch(nodeName, nodeId, qid, skip);
         return CommonResult.success(res);
 
     }

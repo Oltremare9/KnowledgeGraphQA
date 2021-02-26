@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import javax.validation.constraints.Min;
 
+import io.swagger.annotations.ApiModelProperty;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -55,6 +56,7 @@ public class OneHopRequest {
         this.skip = skip;
     }
 
+    @ApiModelProperty("分页页码")
     @Nullable
     Integer skip;
 }

@@ -1,6 +1,7 @@
 package cn.edu.nju.kg_qa.service.impl;
 
 import cn.edu.nju.kg_qa.component.DataCache;
+import cn.edu.nju.kg_qa.config.Config;
 import cn.edu.nju.kg_qa.constant.PresetQuestionEnum;
 import cn.edu.nju.kg_qa.domain.base.BaseRelation;
 import cn.edu.nju.kg_qa.repository.OneHopRelationSearchRepository;
@@ -20,21 +21,21 @@ import java.util.List;
  * @since JDK 11
  */
 @Service
-public class OneHopRelationSearchImpl implements OneHopRelationSearchService{
+public class OneHopRelationSearchImpl implements OneHopRelationSearchService {
 
     @Autowired
     OneHopRelationSearchRepository oneHopRelationSearchRepository;
 
 
     @Override
-    public List<BaseRelation> oneHopRelationSearch(String srcNodeName, Integer nodeId, Integer qid) {
-        List<BaseRelation> res=new ArrayList<>();
-        PresetQuestionEnum questionEnum= DataCache.presetQuestionEnumMap.get(qid);
-        String relationType=questionEnum.getRelationName();
-        if(nodeId==null){
-            res=oneHopRelationSearchRepository.oneHopRelationSearch(srcNodeName,relationType);
-        }else{
-            res=oneHopRelationSearchRepository.oneHopRelationSearch(nodeId,srcNodeName,relationType);
+    public List<BaseRelation> oneHopRelationSearch(String srcNodeName, Integer nodeId, Integer qid, Integer skip) {
+        List<BaseRelation> res = new ArrayList<>();
+        PresetQuestionEnum questionEnum = DataCache.presetQuestionEnumMap.get(qid);
+        String relationType = questionEnum.getRelationName();
+        if (nodeId == null) {
+            res = oneHopRelationSearchRepository.oneHopRelationSearch(srcNodeName, relationType, skip, Config.limit);
+        } else {
+            res = oneHopRelationSearchRepository.oneHopRelationSearch(nodeId, srcNodeName, relationType, skip, Config.limit);
         }
         return res;
     }

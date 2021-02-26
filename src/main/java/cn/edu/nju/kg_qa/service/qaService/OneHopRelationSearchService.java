@@ -1,6 +1,7 @@
 package cn.edu.nju.kg_qa.service.qaService;
 
 import cn.edu.nju.kg_qa.domain.base.BaseRelation;
+import org.springframework.boot.autoconfigure.integration.IntegrationAutoConfiguration;
 
 import java.util.List;
 
@@ -12,12 +13,15 @@ import java.util.List;
  * @since JDK 11
  */
 public interface OneHopRelationSearchService {
+
     /**
      * 根据节点类型 实现单跳问题模板查询
-     * @param srcNodeName   查询节点名
-     * @param nodeId        查询节点id 可能为空
-     * @param qid           问题id qid
+     *
+     * @param srcNodeName
+     * @param nodeId
+     * @param qid
+     * @param skip
      * @return
      */
-    List<BaseRelation> oneHopRelationSearch(String srcNodeName,Integer nodeId, Integer qid);
+    List<BaseRelation> oneHopRelationSearch(String srcNodeName, Integer nodeId, Integer qid, Integer skip);
 }

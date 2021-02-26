@@ -15,24 +15,28 @@ import java.util.List;
  * @since JDK 11
  */
 @Repository
-public interface OneHopRelationSearchRepository extends Neo4jRepository<BaseRelation,Long> {
+public interface OneHopRelationSearchRepository extends Neo4jRepository<BaseRelation, Long> {
 
     /**
      * 根据节点名 实现单跳问题模板查询
-     * @param srcNodeName   起始节点 名
-     * @param relationName  关系     名
+     * @param srcNodeName
+     * @param relationName
+     * @param skip
+     * @param limit
      * @return
      */
-    @Query("Match ans=(p)-[r]-(a) where  p.name=$srcNodeName and type(r)=$relationName return ans")
-    List<BaseRelation> oneHopRelationSearch(String srcNodeName,String relationName);
+    @Query("Match ans=(p)-[r]-(a) where p.name=$srcNodeName and type(r)=$relationName return ans skip $skip limit $limit")
+    List<BaseRelation> oneHopRelationSearch(String srcNodeName, String relationName, int skip, int limit);
 
     /**
-     * 根据节点id 实现单跳问题模板查询
-     * @param srcNodeId     起始节点 id
-     * @param srcNodeName   起始节点 名
-     * @param relationName  关系     名
+     * 实现单跳问题模板查询
+     * @param srcNodeId
+     * @param srcNodeName
+     * @param relationName
+     * @param skip
+     * @param limit
      * @return
      */
-    @Query("Match ans=(p)-[r]-(a) where id(p)=$srcNodeId and p.name=$srcNodeName and type(r)=$relationName return ans ")
-    List<BaseRelation> oneHopRelationSearch(Integer srcNodeId,String srcNodeName,String relationName);
+    @Query("Match ans=(p)-[r]-(a) where id(p)=$srcNodeId and p.name=$srcNodeName and type(r)=$relationName return ans skip $skip limit $limit")
+    List<BaseRelation> oneHopRelationSearch(Integer srcNodeId, String srcNodeName, String relationName, int skip, int limit);
 }

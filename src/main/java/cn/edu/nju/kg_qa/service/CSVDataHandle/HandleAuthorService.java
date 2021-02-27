@@ -1,12 +1,13 @@
-package cn.edu.nju.kg_qa.service.extractService;
+package cn.edu.nju.kg_qa.service.CSVDataHandle;
 
-import ch.qos.logback.classic.turbo.ReconfigureOnChangeFilter;
 import cn.edu.nju.kg_qa.config.Config;
 import cn.edu.nju.kg_qa.config.TableHead;
+import cn.edu.nju.kg_qa.domain.dto.AuthorBeanPatch;
+import cn.edu.nju.kg_qa.domain.dto.CrawlerJsonList;
+import cn.edu.nju.kg_qa.util.Hash;
 import com.csvreader.CsvReader;
 import com.csvreader.CsvWriter;
-import lombok.extern.flogger.Flogger;
-import net.bytebuddy.jar.asm.Handle;
+import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -14,8 +15,9 @@ import org.springframework.stereotype.Service;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import cn.edu.nju.kg_qa.config.Config;
 import org.springframework.util.ResourceUtils;
 
 /**
@@ -29,15 +31,17 @@ import org.springframework.util.ResourceUtils;
  */
 @Service
 public class HandleAuthorService {
-    public static HashMap<String, String> author_Entity = new HashMap<>();
+    public static HashMap<String, AuthorBeanPatch> author_Entity = new HashMap<>();
     public static ArrayList<String> write_Relation = new ArrayList<>();
     public static HashMap<String, String> nation_Entity = new HashMap<>();
     public static HashMap<String, String> humanOf_Relation = new HashMap<>();
     public static HashMap<String, String> assist_Relation = new HashMap<>();
 
-    private Logger logger= LoggerFactory.getLogger(HandleAuthorService.class);
+    Pattern p = Pattern.compile(".*\\d+.*");
 
-    public void clear(){
+    private Logger logger = LoggerFactory.getLogger(HandleAuthorService.class);
+
+    public void clear() {
         author_Entity.clear();
         write_Relation.clear();
         nation_Entity.clear();
@@ -47,52 +51,140 @@ public class HandleAuthorService {
 
     public void extractAuthor(CsvReader csvReader) {
         String isbn = "";
-        String author = "";
         String assistant = "";
         try {
-            isbn = csvReader.get(0).replaceAll("\"","");
-            author = csvReader.get(2).replaceAll("\\\\", "");
+            isbn = csvReader.get(0).replaceAll("\"", "");
             assistant = csvReader.get(8).replaceAll("\\\\", "");
+            CrawlerJsonList bookJson = new CrawlerJsonList();
+            //优先使用爬虫数据
+            if (csvReader.get(19) != null) {
+                bookJson = new Gson().fromJson(csvReader.get(19), CrawlerJsonList.class);
+                if (bookJson.get著者() != null && bookJson.get著者().size() != 0 && !bookJson.get著者().get(0).get系统号().equals("")) {
+                    doExtractAuthorAsJson(bookJson, isbn);
+                    return;
+                }
+            }
+            doExtractAuthorAsCsv(csvReader, isbn);
+            extractAssistant(isbn, assistant);
         } catch (IOException e) {
             System.out.println("e:读取字段错误,isbn:" + isbn);
             e.printStackTrace();
         }
-        if (TableHead.AUTHOR.getValue().equals(author)) {
-            return;
+
+    }
+
+    private void doExtractAuthorAsCsv(CsvReader csvReader, String isbn) {
+        String author = "";
+        String assistant = "";
+        String authorId = "";
+        try {
+            author = csvReader.get(2).replaceAll("\\\\", "");
+            author = author.replaceAll("・", "");
+            authorId = (Hash.stringToHash(author) + 1000000000) + "";
+            assistant = csvReader.get(8).replaceAll("\\\\", "");
+            author = extractNation(authorId, author);
+            AuthorBeanPatch authorBean = new AuthorBeanPatch();
+            author = extractBirth(author, authorBean);
+            author = author.trim();
+            if (author.startsWith(" ")) {
+                author = author.replaceFirst(" ", "");
+            }
+            if (author.contains(" ")) {
+                author = author.split(" ")[0];
+            }
+            authorBean.setTrueName(author.replaceAll("・|\\s| ", ""));
+            authorBean.set系统号(authorId);
+            this.putIntoAuthorMap(authorId, authorBean);
+            write_Relation.add(authorId + "!" + isbn);
+            this.extractAssistant(isbn, assistant);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        //过滤国籍成功
-        author = extractNation(author);
-        if (null == author) {
-            return;
+
+
+    }
+
+    private void doExtractAuthorAsJson(CrawlerJsonList bookJson, String isbn) {
+        String author = "";
+        String assistant = "";
+        String authorId = "";
+        if (bookJson.get著者() != null && bookJson.get著者().size() != 0) {
+            int i = 0;
+            for (AuthorBeanPatch authorBean : bookJson.get著者()) {
+                authorId = authorBean.get系统号();
+                author = authorBean.get名称标目().get(0);
+                author = author.replaceAll("・", "");
+                author = author.replaceAll("\\\\", "");
+                author = author.replaceAll("\"", "");
+                System.out.println(author);
+                author = extractNation(authorId, author);
+                author = extractBirth(author, authorBean);
+                if (null == author) {
+                    return;
+                }
+                author = author.trim();
+                if (author.startsWith(" ")) {
+                    author = author.replaceFirst(" ", "");
+                }
+                if (author.contains(" ")) {
+                    author = author.split(" ")[0];
+                }
+                authorBean.setTrueName(author.replaceAll("・|\\s| ", ""));
+                this.putIntoAuthorMap(authorId, authorBean);
+                write_Relation.add(authorId + "!" + isbn);
+            }
         }
-        this.putIntoAuthorMap(author);
-        write_Relation.add(author + "!" + isbn);
-        extractAssistant(isbn, assistant);
+    }
+
+    private String extractBirth(String authorName, AuthorBeanPatch authorBeanPatch) {
+        authorName = authorName.replaceAll(" ", "");
+        String year = "";
+        String birth = "";
+        if (authorName.trim().contains("(") && authorName.trim().contains(")") && !authorName.trim().startsWith("(")) {
+            year = authorName;
+            int startIndex = year.lastIndexOf("(");
+            int endIndex = year.lastIndexOf(")");
+            birth = year.substring(startIndex, endIndex + 1);
+
+            Matcher m = p.matcher(birth);
+            if (m.matches()) {
+                System.out.println(birth);
+                authorName = year.substring(0, startIndex);
+                System.out.println(authorName);
+            } else {
+                return authorName.trim().replaceAll("\\p{Punct}", "");
+            }
+
+        }
+        authorBeanPatch.setYear(birth);
+        return authorName.trim().replaceAll("\\p{Punct}", "");
     }
 
     /**
      * 对作者名中含国籍的进行过滤 存储humanOf关系
      *
-     * @param author
+     * @param
      * @return
      */
-    private String extractNation(String author) {
-        if (TableHead.AUTHOR.getValue().equals(author)) {
+    private String extractNation(String authorId, String authorName) {
+        if (TableHead.AUTHOR.getValue().equals(authorName)) {
             return null;
         }
-        author = author.replaceAll(" ", "");
-        String nation = author;
+        authorName = authorName.replaceAll(" ", "");
+        String nation = authorName;
         if (nation.trim().startsWith("(")) {
-            author = nation.substring(nation.indexOf(")") + 1);
+            authorName = nation.substring(nation.indexOf(")") + 1);
             nation = nation.substring(1);
             int index = nation.indexOf(")");
             nation = nation.substring(0, index);
-            if (!nation_Entity.containsKey(nation) && !nation.replaceAll("\"","").equals("")) {
+            if (!nation_Entity.containsKey(nation) && !nation.replaceAll("\"", "").equals("")) {
                 nation_Entity.put(nation, "");
             }
-            humanOf_Relation.put(author + "!" + nation, "");
+            humanOf_Relation.put(authorId + "!" + nation, "");
+
+            System.out.println(authorName + "!" + nation);
         }
-        return author;
+        return authorName;
     }
 
     private void extractAssistant(String isbn, String assistant) {
@@ -119,26 +211,30 @@ public class HandleAuthorService {
                     || assist.contains("陈述")) {
                 continue;
             }
-            assist = this.extractNation(assist);
+            AuthorBeanPatch authorBean = new AuthorBeanPatch();
+            String authorId = (Hash.stringToHash(assist) + 1000000000) + "";
+            assist = this.extractNation(authorId, assist);
             if (null == assist) {
                 return;
             }
-            this.putIntoAuthorMap(assist);
-            assist_Relation.put(assist + "!" + isbn, "");
+            String trueName = this.extractBirth(assist, authorBean);
+            authorBean.set系统号(authorId);
+            trueName = trueName.trim();
+            if (trueName.startsWith(" ")) {
+                trueName = trueName.replaceFirst(" ", "");
+            }
+            if (trueName.contains(" ")) {
+                trueName = trueName.split(" ")[0];
+            }
+            authorBean.setTrueName(trueName.replaceAll("・|\\s| ", ""));
+            this.putIntoAuthorMap(authorId, authorBean);
+            assist_Relation.put(authorId + "!" + isbn, "");
         }
     }
 
-    /**
-     * 作者存放入实体 未来消歧
-     *
-     * @param authorName
-     */
-    private void putIntoAuthorMap(String authorName) {
-        if (authorName.trim().equals("")) {
-            return;
-        }
-        if (!author_Entity.containsKey(authorName)) {
-            author_Entity.put(authorName, "");
+    private void putIntoAuthorMap(String authorId, AuthorBeanPatch authorBeanPatch) {
+        if (!author_Entity.containsKey(authorId)) {
+            author_Entity.put(authorId, authorBeanPatch);
         } else {
             //todo 消歧
         }
@@ -148,7 +244,7 @@ public class HandleAuthorService {
     public void writeAuthorsEntity() {
         File authorEntityFile = null;
         try {
-            authorEntityFile = ResourceUtils.getFile(Config.OUT_CSV_PATH+"author_entity.csv");
+            authorEntityFile = ResourceUtils.getFile(Config.OUT_CSV_PATH + "author_entity.csv");
         } catch (FileNotFoundException e) {
             logger.error("文件未找到");
             e.printStackTrace();
@@ -173,17 +269,26 @@ public class HandleAuthorService {
         CsvWriter cWriter = new CsvWriter(writer, ',');
         try {
             //todo 可能会丰富字段
-            cWriter.writeRecord("name".split(","), true);
+            cWriter.writeRecord("id,name,birth,description".split(","), true);
         } catch (IOException e) {
             System.out.println("e:写入表头失败");
             e.printStackTrace();
         }
-        for (HashMap.Entry<String, String> entry : author_Entity.entrySet()) {
+        for (HashMap.Entry<String, AuthorBeanPatch> entry : author_Entity.entrySet()) {
             String mapKey = entry.getKey();
-            String mapValue = entry.getValue();
+            AuthorBeanPatch mapValue = entry.getValue();
             System.out.println(mapKey + ":" + mapValue);
+            String description = " ";
+            String year = " ";
             try {
-                cWriter.writeRecord((mapKey).split(","), true);
+                if (mapValue.get标目附注() != null && mapValue.get标目附注().size() != 0) {
+                    description = mapValue.get标目附注().toString();
+                }
+                if (mapValue.getYear() != null && !mapValue.getYear().equals("")) {
+                    year = mapValue.getYear();
+                }
+                cWriter.writeRecord((mapValue.get系统号() + "&!" + mapValue.getTrueName() + "&!" + year + "&!" + description.replaceAll("[|]|\"", "")).
+                        split("&!"), true);
             } catch (IOException e) {
                 System.out.println("e:写入数据失败+key:" + mapKey);
                 e.printStackTrace();
@@ -195,12 +300,12 @@ public class HandleAuthorService {
     public void writeNationEntity() {
         File nationEntityFile = null;
         try {
-            nationEntityFile = ResourceUtils.getFile(Config.OUT_CSV_PATH+"nation_entity.csv");
+            nationEntityFile = ResourceUtils.getFile(Config.OUT_CSV_PATH + "nation_entity.csv");
         } catch (FileNotFoundException e) {
-            logger.error("文件{}未找到",nationEntityFile.getAbsolutePath());
+            logger.error("文件{}未找到", nationEntityFile.getAbsolutePath());
             e.printStackTrace();
         }
-        logger.debug("文件名为{}",nationEntityFile.getAbsolutePath());
+        logger.debug("文件名为{}", nationEntityFile.getAbsolutePath());
         if (nationEntityFile.exists()) {
             nationEntityFile.delete();
         }
@@ -239,9 +344,9 @@ public class HandleAuthorService {
     }
 
     public void writeWriteRelation() {
-        File writeRelationFile =null;
+        File writeRelationFile = null;
         try {
-            writeRelationFile = ResourceUtils.getFile(Config.OUT_CSV_PATH+"write_relation.csv");
+            writeRelationFile = ResourceUtils.getFile(Config.OUT_CSV_PATH + "write_relation.csv");
         } catch (FileNotFoundException e) {
             logger.error("未找到指定文件writeWriteRelation");
             e.printStackTrace();
@@ -264,7 +369,7 @@ public class HandleAuthorService {
         }
         CsvWriter cWriter = new CsvWriter(writer, ',');
         try {
-            cWriter.writeRecord("author_name,book_id".split(","), true);
+            cWriter.writeRecord("author_id,book_id".split(","), true);
         } catch (IOException e) {
             System.out.println("e:写入表头失败");
             e.printStackTrace();
@@ -306,7 +411,7 @@ public class HandleAuthorService {
         }
         CsvWriter cWriter = new CsvWriter(writer, ',');
         try {
-            cWriter.writeRecord("author_name,nation_name".split(","), true);
+            cWriter.writeRecord("author_id,nation_name".split(","), true);
         } catch (IOException e) {
             System.out.println("e:写入表头失败");
             e.printStackTrace();
@@ -326,7 +431,7 @@ public class HandleAuthorService {
     }
 
     public void writeAssistRelation() {
-        File assistRelationFile = new File(Config.OUT_CSV_PATH  + "assist_relation.csv");
+        File assistRelationFile = new File(Config.OUT_CSV_PATH + "assist_relation.csv");
         if (assistRelationFile.exists()) {
             assistRelationFile.delete();
         }
@@ -345,7 +450,7 @@ public class HandleAuthorService {
         }
         CsvWriter cWriter = new CsvWriter(writer, ',');
         try {
-            cWriter.writeRecord("author_name,book_id".split(","), true);
+            cWriter.writeRecord("author_id,book_id".split(","), true);
         } catch (IOException e) {
             System.out.println("e:写入表头失败");
             e.printStackTrace();

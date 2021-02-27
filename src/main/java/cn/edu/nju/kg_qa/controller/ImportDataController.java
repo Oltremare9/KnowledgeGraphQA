@@ -1,13 +1,10 @@
 package cn.edu.nju.kg_qa.controller;
 
 import cn.edu.nju.kg_qa.common.CommonResult;
-import cn.edu.nju.kg_qa.service.extractService.ImportDataService;
+import cn.edu.nju.kg_qa.service.dataService.ImportDataService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.neo4j.driver.AuthTokens;
 import cn.edu.nju.kg_qa.config.Config;
-import org.neo4j.driver.Driver;
-import org.neo4j.driver.GraphDatabase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +37,10 @@ public class ImportDataController {
     @ApiOperation(value = "导入所有实体节点")
     @PostMapping(value = "/importAllEntities")
     public CommonResult<Boolean> importAllEntity() {
+        //jieba分词文件 nodeName-权重
         List<String> entityNameForJieBa = new ArrayList<>();
+        //jieba分词对照文件 nodeName-nodeType
+        List<String> entityNameAndTypeForJieBa = new ArrayList<>();
         File folder = new File(Config.OUT_CSV_PATH);
         File[] files = folder.listFiles();
         for (File entityFile : files) {
@@ -56,9 +56,10 @@ public class ImportDataController {
                 logger.error("文件命名错误，不确定是否为entity");
                 continue;
             }
-            importDataService.importDataForEntity(entityFile, entityName, entityNameForJieBa);
+            importDataService.importDataForEntity(entityFile, entityName, entityNameForJieBa,entityNameAndTypeForJieBa);
         }
         importDataService.writeJieBaWords(entityNameForJieBa);
+        importDataService.writeJieBaContrast(entityNameAndTypeForJieBa);
         return CommonResult.success(true);
     }
 

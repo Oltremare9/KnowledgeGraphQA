@@ -1,9 +1,6 @@
-package cn.edu.nju.kg_qa.service.extractService;
+package cn.edu.nju.kg_qa.service.dataService;
 
 import cn.edu.nju.kg_qa.config.Config;
-import cn.edu.nju.kg_qa.util.Jieba;
-import com.google.common.io.Resources;
-import lombok.extern.flogger.Flogger;
 import org.neo4j.driver.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,12 +10,8 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -42,18 +35,18 @@ public class ImportDataService {
     @Value("${spring.data.neo4j.password}")
     private static String password;
 
-//    private static final Driver driver = GraphDatabase.driver(uri,
-//            AuthTokens.basic(username, password));
-
-
-    public Driver createDrive(){
-        return GraphDatabase.driver( uri, AuthTokens.basic(username, password) );
+    public Driver createDrive() {
+        return GraphDatabase.driver(uri, AuthTokens.basic(username, password));
     }
+
+//    public Driver createDrive() {
+//        return GraphDatabase.driver("bolt://localhost:7687", AuthTokens.basic("neo4j", "root"));
+//    }
 
     private Logger logger = LoggerFactory.getLogger(ImportDataService.class);
 
     public void importDataForRelation(File relationFile, String relationName) {
-        Driver driver=createDrive();
+        Driver driver = createDrive();
         List<String> lines = null;
         try {
             lines = Files.readAllLines(relationFile.toPath(),
@@ -97,8 +90,14 @@ public class ImportDataService {
         driver.close();
     }
 
-    public void importDataForEntity(File entityFile, String entityName, List<String> entityNameForJieBa) {
-        Driver driver=createDrive();
+    /**
+     * @param entityFile                实体预处理文件
+     * @param entityName                实体类型 label名称
+     * @param entityNameForJieBa        jieba分词文件 name-权重
+     * @param entityNameAndTypeForJieBa jieba对照列表 name-type
+     */
+    public void importDataForEntity(File entityFile, String entityName, List<String> entityNameForJieBa, List<String> entityNameAndTypeForJieBa) {
+        Driver driver = createDrive();
         int indexOfEntityName = -1;
         List<String> lines = null;
         try {
@@ -108,33 +107,45 @@ public class ImportDataService {
             logger.error("读取csv文件错误，path：" + entityFile.getAbsolutePath());
             e.printStackTrace();
         }
+        System.out.println(entityFile.getName());
         String header = lines.get(0);
         String headers[] = header.split(",");
         int propertyNum = headers.length;
         //+" property1:value, property2:value, property3:value} )";
-        String cypher = "CREATE (:" + entityName + "{";
+        String cypher = "merge (p:" + entityName + "{";
+        cypher = cypher + headers[0] + ":value0})";
+        cypher = cypher + "set p+={";
         for (int i = 0; i < propertyNum; i++) {
-            if (i != 0) {
-                cypher += ",";
-            }
-            cypher += headers[i] + ":value" + i;
             if (headers[i].equals("name")) {
                 indexOfEntityName = i;
             }
         }
-        cypher += "})";
+        for (int i = 1; i < propertyNum; i++) {
+            if (i != 1) {
+                cypher += ",";
+            }
+            cypher += headers[i] + ":value" + i;
+        }
+        cypher += "}";
 
 
         for (int transactionNum = 0; transactionNum <= lines.size() / 2000; transactionNum++) {
             try (Session session = driver.session()) {
                 try (Transaction tx = session.beginTransaction()) {
                     for (int i = transactionNum * 2000 + 1; i <= Math.min((transactionNum + 1) * 2000, lines.size() - 1); i++) {
+                        System.out.println(lines.get(i));
                         String[] array = lines.get(i).split(",");
                         String execute = cypher;
                         for (int j = 0; j < propertyNum; j++) {
-                            execute = execute.replace("value" + j, "'" + array[j] + "'");
+                            execute = execute.replace("value" + j, "'" + array[j].replaceAll("“|”|\"|\\\\", "") + "'");
                             if (j == indexOfEntityName) {
-                                entityNameForJieBa.add(array[j]);
+                                if (!entityFile.getName().contains("concept")) {
+                                    String str = "[`\\\\~!@#$%^&*()+=|{}':;',\\[\\].<>/?~！@#￥%…&*（）——+|{}【】‘；：”“’。，、？《》]";
+                                    String value = array[j];
+                                    value = value.replaceAll(str, "");
+                                    entityNameForJieBa.add(value);
+                                    entityNameAndTypeForJieBa.add(value + "\t" + entityName);
+                                }
                             }
                         }
                         tx.run(execute);
@@ -147,6 +158,11 @@ public class ImportDataService {
         driver.close();
     }
 
+    /**
+     * 写入jieba分词文件
+     *
+     * @param jieBaWords
+     */
     public void writeJieBaWords(List<String> jieBaWords) {
         File dicts = new File(Config.JIEBA_ENTITY_PATH);
         if (dicts.exists()) {
@@ -172,6 +188,38 @@ public class ImportDataService {
             e.printStackTrace();
         }
         logger.warn("jieba文件写入成功");
+    }
+
+    /**
+     * 写入jieba对照文件
+     *
+     * @param entityNameAndTypeForJieBa
+     */
+    public void writeJieBaContrast(List<String> entityNameAndTypeForJieBa) {
+        File dicts = new File(Config.JIEBA_Contrast_PATH);
+        if (dicts.exists()) {
+            dicts.delete();
+        }
+        try {
+            dicts.createNewFile();
+        } catch (IOException e) {
+            logger.error("创建jieba对照文件失败");
+            e.printStackTrace();
+        }
+        try {
+            FileWriter fileWriter = new FileWriter(dicts, true);
+            for (String s : entityNameAndTypeForJieBa) {
+                s = s.replaceAll(" ", "");
+                s = s.replaceAll(" ", "");
+                fileWriter.write(s + "\n");
+            }
+            fileWriter.flush();
+            fileWriter.close();
+        } catch (IOException e) {
+            logger.error("fileWriter创建失败");
+            e.printStackTrace();
+        }
+        logger.warn("jieba对照文件写入成功");
     }
 
 

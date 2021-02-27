@@ -1,18 +1,14 @@
 package cn.edu.nju.kg_qa.util;
 
 import cn.edu.nju.kg_qa.config.Config;
-import cn.edu.nju.kg_qa.service.extractService.HandleBookSeriesService;
 import com.huaban.analysis.jieba.JiebaSegmenter;
 import com.huaban.analysis.jieba.SegToken;
 import com.huaban.analysis.jieba.WordDictionary;
-import junit.framework.TestCase;
-import lombok.extern.flogger.Flogger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 
 /**

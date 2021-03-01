@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -36,6 +38,7 @@ public class HandleAuthorService {
     public static HashMap<String, String> nation_Entity = new HashMap<>();
     public static HashMap<String, String> humanOf_Relation = new HashMap<>();
     public static HashMap<String, String> assist_Relation = new HashMap<>();
+    public static HashMap<String, String> otherName = new HashMap<>();
 
     Pattern p = Pattern.compile(".*\\d+.*");
 
@@ -47,6 +50,7 @@ public class HandleAuthorService {
         nation_Entity.clear();
         humanOf_Relation.clear();
         assist_Relation.clear();
+        otherName.clear();
     }
 
     public void extractAuthor(CsvReader csvReader) {
@@ -94,6 +98,7 @@ public class HandleAuthorService {
             }
             authorBean.setTrueName(author.replaceAll("・|\\s| ", ""));
             authorBean.set系统号(authorId);
+            authorBean.setTrueOtherNames("[]");
             this.putIntoAuthorMap(authorId, authorBean);
             write_Relation.add(authorId + "!" + isbn);
             this.extractAssistant(isbn, assistant);
@@ -108,6 +113,7 @@ public class HandleAuthorService {
         String author = "";
         String assistant = "";
         String authorId = "";
+        String otherName = " ";
         if (bookJson.get著者() != null && bookJson.get著者().size() != 0) {
             int i = 0;
             for (AuthorBeanPatch authorBean : bookJson.get著者()) {
@@ -130,10 +136,25 @@ public class HandleAuthorService {
                     author = author.split(" ")[0];
                 }
                 authorBean.setTrueName(author.replaceAll("・|\\s| ", ""));
+                extractOtherNames(authorBean, authorId);
                 this.putIntoAuthorMap(authorId, authorBean);
                 write_Relation.add(authorId + "!" + isbn);
             }
         }
+    }
+
+    private void extractOtherNames(AuthorBeanPatch authorBeanPatch, String authorId) {
+        List<String> otherNames = authorBeanPatch.get单纯参照();
+        List<String> trueOtherNames = new ArrayList<>();
+        if (otherNames != null && otherNames.size() > 0) {
+            for (String names : otherNames) {
+                names = names.replaceAll("(\\([^\\)]+\\))", "");
+                names = names.replaceAll("·| |,", "");
+                trueOtherNames.add(names);
+                otherName.put(names.toLowerCase().replaceAll(" ", ""), authorId);
+            }
+        }
+        authorBeanPatch.setTrueOtherNames(trueOtherNames.toString());
     }
 
     private String extractBirth(String authorName, AuthorBeanPatch authorBeanPatch) {
@@ -269,7 +290,7 @@ public class HandleAuthorService {
         CsvWriter cWriter = new CsvWriter(writer, ',');
         try {
             //todo 可能会丰富字段
-            cWriter.writeRecord("id,name,birth,description".split(","), true);
+            cWriter.writeRecord("id,name,birth,description,otherNames".split(","), true);
         } catch (IOException e) {
             System.out.println("e:写入表头失败");
             e.printStackTrace();
@@ -280,14 +301,20 @@ public class HandleAuthorService {
             System.out.println(mapKey + ":" + mapValue);
             String description = " ";
             String year = " ";
+            String otherNames=" ";
             try {
                 if (mapValue.get标目附注() != null && mapValue.get标目附注().size() != 0) {
-                    description = mapValue.get标目附注().toString();
+                    description = mapValue.get标目附注().toString().replaceAll(",|，", ";");
                 }
                 if (mapValue.getYear() != null && !mapValue.getYear().equals("")) {
-                    year = mapValue.getYear();
+                    year = mapValue.getYear().replaceAll(",|[|]", "");
                 }
-                cWriter.writeRecord((mapValue.get系统号() + "&!" + mapValue.getTrueName() + "&!" + year + "&!" + description.replaceAll("[|]|\"", "")).
+                if(mapValue.getTrueOtherNames()!=null){
+                    otherNames=mapValue.getTrueOtherNames().replaceAll(",|[|]", "");
+                }
+                cWriter.writeRecord((mapValue.get系统号() + "&!" + mapValue.getTrueName() + "&!" + year + "&!" +
+                        description.replaceAll("[|]|\"", "")+"&!"+
+                        otherNames.toLowerCase().replaceAll(",|，",";" )).
                         split("&!"), true);
             } catch (IOException e) {
                 System.out.println("e:写入数据失败+key:" + mapKey);
@@ -466,6 +493,29 @@ public class HandleAuthorService {
                 e.printStackTrace();
             }
             cWriter.flush();//刷新数据
+        }
+    }
+
+    public void writeOtherNames() {
+        File file = new File(Config.OTHER_NAMES_PATH);
+        FileWriter fileWriter = null;
+        try {
+            fileWriter = new FileWriter(file);
+        } catch (IOException e) {
+            logger.error("fileWriter创建失败");
+            e.printStackTrace();
+        }
+        BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+        try {
+            for (Map.Entry<String, String> entry : otherName.entrySet()) {
+
+                bufferedWriter.write(entry.getKey().replaceAll("\"","") + "!" + entry.getValue()+"\n");
+            }
+            bufferedWriter.flush();
+            bufferedWriter.close();
+        } catch (IOException e) {
+            logger.error("别名写入失败");
+            e.printStackTrace();
         }
     }
 

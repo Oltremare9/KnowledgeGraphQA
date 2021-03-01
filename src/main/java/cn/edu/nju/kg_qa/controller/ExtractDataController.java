@@ -81,6 +81,7 @@ public class ExtractDataController {
             handleAuthorService.writeAssistRelation();
             handleAuthorService.writeHumanOfRelation();
             handleAuthorService.writeWriteRelation();
+            handleAuthorService.writeOtherNames();
             handleAuthorService.clear();
         } catch (FileNotFoundException e) {
             e.printStackTrace();

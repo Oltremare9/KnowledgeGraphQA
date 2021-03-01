@@ -29,6 +29,13 @@ public interface JieBaService {
     public List<NodeNameAndLabelsDto> getWordLabelAndNameAndRelation(String nodeName);
 
     /**
+     * 通过别名 根据节点id 右模糊匹配节点全名称+标签
+     * @param nodeId
+     * @return
+     */
+    public List<NodeNameAndLabelsDto> getWordLabelAndNameAndRelationByNodeId(String nodeId);
+
+    /**
      * 根据确切节点名 匹配节点标签
      * @param nodeName
      * @return

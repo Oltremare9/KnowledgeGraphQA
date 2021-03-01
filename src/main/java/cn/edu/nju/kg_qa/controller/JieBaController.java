@@ -38,6 +38,12 @@ public class JieBaController {
     @ApiOperation("根据节点名 右模糊匹配节点全名称+标签+存在的关系")
     @GetMapping("/getWordLabelAndName/{nodeName}")
     public CommonResult<List<NodeNameAndLabelsDto>> getWordLabelAndName(@PathVariable String nodeName){
-        return CommonResult.success(jieBaService.getWordLabelAndName(nodeName));
+        return CommonResult.success(jieBaService.getWordLabelAndNameAndRelation(nodeName));
+    }
+
+    @ApiOperation("根据节点名 匹配节点标签")
+    @GetMapping("/getWordLabelByExactNodeName/{nodeName}")
+    public CommonResult<List<String>> getWordLabelByExactNodeName(@PathVariable String nodeName){
+        return CommonResult.success(jieBaService.getWordLabelByExactName(nodeName));
     }
 }

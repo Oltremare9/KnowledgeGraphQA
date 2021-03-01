@@ -1,4 +1,4 @@
-package cn.edu.nju.kg_qa.config;
+package cn.edu.nju.kg_qa.constant;
 
 /**
  * Description: <br/>

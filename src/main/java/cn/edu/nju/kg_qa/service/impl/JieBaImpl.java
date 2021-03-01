@@ -40,10 +40,15 @@ public class JieBaImpl implements JieBaService {
      * @return
      */
     @Override
-    public List<NodeNameAndLabelsDto> getWordLabelAndName(String nodeName){
+    public List<NodeNameAndLabelsDto> getWordLabelAndNameAndRelation(String nodeName){
         if(nodeName.length()<2){
             return new ArrayList<>();
         }
-        return jieBaRepository.getWordLabelAndName(nodeName);
+        return jieBaRepository.getWordLabelAndNameAndRelation(nodeName);
+    }
+
+    @Override
+    public List<String> getWordLabelByExactName(String nodeName) {
+        return jieBaRepository.getWordLabelByExactName(nodeName);
     }
 }

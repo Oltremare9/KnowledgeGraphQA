@@ -51,4 +51,9 @@ public class JieBaImpl implements JieBaService {
     public List<String> getWordLabelByExactName(String nodeName) {
         return jieBaRepository.getWordLabelByExactName(nodeName);
     }
+
+    @Override
+    public List<NodeNameAndLabelsDto> getWordLabelAndNameAndRelationByNodeId(String nodeId) {
+        return jieBaRepository.getWordLabelAndNameAndRelationByNodeId(nodeId);
+    }
 }

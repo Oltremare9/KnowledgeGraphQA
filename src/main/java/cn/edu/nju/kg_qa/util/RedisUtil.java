@@ -41,6 +41,17 @@ public class RedisUtil {
         }
     }
 
+    public boolean expireHalfMonth(String key) {
+        try {
+            redisTemplate.expire(key, 1296000, TimeUnit.SECONDS);
+
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     /**
      * 根据key 获取过期时间
      *
@@ -602,6 +613,7 @@ public class RedisUtil {
 
     /**
      * 返回有序的集合中，score大的在前面
+     *
      * @param key
      * @param start
      * @param end
@@ -610,6 +622,7 @@ public class RedisUtil {
     public Set<Object> revRange(String key, int start, int end) {
         return redisTemplate.opsForZSet().reverseRange(key, start, end);
     }
+
 }
 
 

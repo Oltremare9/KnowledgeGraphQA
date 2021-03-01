@@ -3,19 +3,20 @@ package cn.edu.nju.kg_qa.service.impl;
 import cn.edu.nju.kg_qa.component.DataCache;
 import cn.edu.nju.kg_qa.constant.LabelEnum;
 import cn.edu.nju.kg_qa.constant.PresetQuestionEnum;
+import cn.edu.nju.kg_qa.constant.RedisPrefix;
 import cn.edu.nju.kg_qa.domain.dto.NodeNameAndLabelsDto;
 import cn.edu.nju.kg_qa.domain.response.PresetQuestionResponse;
 import cn.edu.nju.kg_qa.service.qaService.JieBaService;
 import cn.edu.nju.kg_qa.service.qaService.PresetQAService;
+import cn.edu.nju.kg_qa.util.RedisUtil;
 import com.huaban.analysis.jieba.SegToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import javax.swing.text.html.HTMLDocument;
+import java.util.*;
 
 /**
  * Description: <br/>
@@ -31,6 +32,9 @@ public class PresetQAImpl implements PresetQAService {
     @Autowired
     JieBaService jieBaService;
 
+    @Autowired
+    RedisUtil redisUtil;
+
     @Override
     public List<PresetQuestionResponse> getPotentialUsersQuestions(String userInput) {
         List<SegToken> tokens = jieBaService.jieBaCutSentence(userInput);
@@ -42,12 +46,43 @@ public class PresetQAImpl implements PresetQAService {
                 for (int j = index; j <= i; j++) {
                     nodePrefix += tokens.get(j).word;
                 }
-                list = jieBaService.getWordLabelAndNameAndRelation(nodePrefix);
+                if (!DataCache.otherNamesMap.containsKey(nodePrefix)) {
+                    list = jieBaService.getWordLabelAndNameAndRelation(nodePrefix);
+                } else {
+                    String nodeId = DataCache.otherNamesMap.get(nodePrefix);
+                    list = jieBaService.getWordLabelAndNameAndRelationByNodeId(nodeId);
+                }
+                Set<Object> nodeTypeSet = redisUtil.revRange(RedisPrefix.E_Type_ZSet.getPrefix(), 0, -1);
+                logger.info(nodeTypeSet.toString());
                 //不是特定图谱内节点
                 if (null == list || list.size() == 0) {
                     continue;
                 } else {
-                    //todo 根据node热度进行排序
+                    list.sort(new Comparator<NodeNameAndLabelsDto>() {
+                        @Override
+                        public int compare(NodeNameAndLabelsDto t0, NodeNameAndLabelsDto t1) {
+                            String label1 = t0.getLabel().get(0);
+                            String label2 = t1.getLabel().get(0);
+                            //类别相同 暂不做排序
+                            //todo 根据node热度进行排序
+                            if (label1.equals(label2)) {
+                                return 0;
+                            } else {
+                                // 类别不同 以节点类别排序
+                                Iterator iterator = nodeTypeSet.iterator();
+                                while (iterator.hasNext()) {
+                                    String label = String.valueOf(iterator.next());
+                                    if (label1.equals(label)) {
+                                        return -1;
+                                    }
+                                    if (label2.equals(label)) {
+                                        return 1;
+                                    }
+                                }
+                                return 0;
+                            }
+                        }
+                    });
                     for (NodeNameAndLabelsDto node : list) {
                         String relationType = node.getRelationType();
                         String nodeName = node.getNodeName();

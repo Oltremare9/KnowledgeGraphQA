@@ -41,11 +41,14 @@ public class OneHopRelationSearchImpl implements OneHopRelationSearchService {
         PresetQuestionEnum questionEnum = DataCache.presetQuestionEnumMap.get(qid);
         //问题类型统计
         redisUtil.zIncrScore(RedisPrefix.Q_Type_ZSet.getPrefix(), qid.toString());
+        redisUtil.expireHalfMonth(RedisPrefix.Q_Type_ZSet.getPrefix());
         String nodeType = DataCache.presetQuestionEnumMap.get(qid).getSrcNodeType();
         //节点类型统计
         if (nodeType != null && !nodeType.equals("")) {
             redisUtil.zIncrScore(RedisPrefix.E_Type_ZSet.getPrefix(), nodeType);
+            redisUtil.expireHalfMonth(RedisPrefix.E_Type_ZSet.getPrefix());
             redisUtil.zIncrScore(RedisPrefix.E_Node_ZSet.getPrefix()+nodeType, nodeId.toString());
+            redisUtil.expireHalfMonth(RedisPrefix.E_Node_ZSet.getPrefix()+nodeType);
         }
 
         String relationType = questionEnum.getRelationName();

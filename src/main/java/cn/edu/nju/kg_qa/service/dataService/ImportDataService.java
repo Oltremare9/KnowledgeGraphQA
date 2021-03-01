@@ -38,6 +38,10 @@ public class ImportDataService {
     }
 
 //    public Driver createDrive() {
+//        return GraphDatabase.driver("bolt://http://182.61.50.186/:7687", AuthTokens.basic("neo4j", "root"));
+//    }
+
+//    public Driver createDrive() {
 //        return GraphDatabase.driver("bolt://localhost:7687", AuthTokens.basic("neo4j", "root"));
 //    }
 

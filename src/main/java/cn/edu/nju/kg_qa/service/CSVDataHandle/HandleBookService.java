@@ -1,7 +1,7 @@
 package cn.edu.nju.kg_qa.service.CSVDataHandle;
 
 import cn.edu.nju.kg_qa.config.Config;
-import cn.edu.nju.kg_qa.config.TableHead;
+import cn.edu.nju.kg_qa.constant.TableHead;
 import cn.edu.nju.kg_qa.domain.dto.CrawlerJsonList;
 import com.csvreader.CsvReader;
 import com.csvreader.CsvWriter;

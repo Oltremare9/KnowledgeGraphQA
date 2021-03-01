@@ -21,5 +21,9 @@ public interface JieBaRepository  extends Neo4jRepository<BaseRelation,Long> {
 
     @Query("Match (p)-[r]-() where p.name=~ $nodeName+'.*' " +
             "return distinct(labels(p)) as label ,p.name as nodeName,id(p) as id,type(r) as relationType")
-    List<NodeNameAndLabelsDto> getWordLabelAndName(@Param("nodeName") String nodeName);
+    List<NodeNameAndLabelsDto> getWordLabelAndNameAndRelation(@Param("nodeName") String nodeName);
+
+    @Query("Match (p)-[r]-() where p.name=$nodeName" +
+            " return distinct(labels(p)) ")
+    List<String> getWordLabelByExactName(String nodeName);
 }

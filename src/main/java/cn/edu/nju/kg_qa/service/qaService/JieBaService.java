@@ -26,5 +26,12 @@ public interface JieBaService {
      * @param nodeName
      * @return
      */
-    public List<NodeNameAndLabelsDto> getWordLabelAndName(String nodeName);
+    public List<NodeNameAndLabelsDto> getWordLabelAndNameAndRelation(String nodeName);
+
+    /**
+     * 根据确切节点名 匹配节点标签
+     * @param nodeName
+     * @return
+     */
+    public List<String> getWordLabelByExactName(String nodeName);
 }

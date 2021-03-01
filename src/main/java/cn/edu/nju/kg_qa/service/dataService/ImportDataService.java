@@ -7,9 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.List;
@@ -180,6 +178,12 @@ public class ImportDataService {
                 s = s.replaceAll(" ", "");
                 s = s.replaceAll(" ", "");
                 fileWriter.write(s + "    5\n");
+            }
+            FileReader fileReader=new FileReader(Config.OUT_CSV_PATH+"otherNames.txt");
+            BufferedReader bufferedReader=new BufferedReader(fileReader);
+            String line="";
+            while((line=bufferedReader.readLine())!=null){
+                fileWriter.write(line.split("!")[0].replaceAll(" |\"","")+"\t5\n");
             }
             fileWriter.flush();
             fileWriter.close();

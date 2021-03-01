@@ -87,4 +87,14 @@ public class AuthorBeanPatch {
     public void set标目附注(List<String> 标目附注) {
         this.标目附注 = 标目附注;
     }
+
+    public String trueOtherNames;
+
+    public String getTrueOtherNames() {
+        return trueOtherNames;
+    }
+
+    public void setTrueOtherNames(String trueOtherNames) {
+        this.trueOtherNames = trueOtherNames;
+    }
 }

@@ -1,5 +1,6 @@
 package cn.edu.nju.kg_qa.component;
 
+import cn.edu.nju.kg_qa.config.Config;
 import cn.edu.nju.kg_qa.constant.PresetQuestionEnum;
 import cn.edu.nju.kg_qa.service.CSVDataHandle.HandleDateService;
 import org.slf4j.Logger;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import java.io.*;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -22,6 +24,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class DataCache {
     public static Map<Integer, PresetQuestionEnum> presetQuestionEnumMap = new ConcurrentHashMap<>();
 
+    public static Map<String,String> otherNamesMap=new ConcurrentHashMap<>();
     private Logger logger= LoggerFactory.getLogger(HandleDateService.class);
     @PostConstruct
     public void init() {
@@ -34,6 +37,30 @@ public class DataCache {
         }
         logger.warn("加载完成---------------------------");
 
+
+        logger.warn("加载别名文件中---------------------------");
+        File file=new File(Config.OTHER_NAMES_PATH);
+        FileReader fileReader=null;
+
+        try {
+            fileReader=new FileReader(file);
+            BufferedReader bufferedReader=new BufferedReader(fileReader);
+            String line="";
+            while((line=bufferedReader.readLine())!=null){
+                if(!line.endsWith("!")){
+                    String s[]=line.split("!");
+                    otherNamesMap.put(s[0],s[1]);
+                }
+            }
+        } catch (FileNotFoundException e) {
+            logger.error("别名文件读取错误");
+            e.printStackTrace();
+        } catch (IOException e) {
+            logger.error("读取别名文件行 错误");
+            e.printStackTrace();
+        }
+        logger.warn("加载别名文件完成---------------------------");
+        logger.info(otherNamesMap.toString());
 
     }
 

@@ -26,4 +26,5 @@ public interface ComplexNodeRepository extends Neo4jRepository<BaseNode,Long> {
      */
     @Query("Match ans=(p)-[r]-(a) where a.name=$nodeName return p")
     List<BaseNode> findAnyProperNodesByName(@Param("nodeName") String nodeName);
+
 }

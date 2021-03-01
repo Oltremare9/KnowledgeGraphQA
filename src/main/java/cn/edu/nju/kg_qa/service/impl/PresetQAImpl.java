@@ -1,7 +1,7 @@
 package cn.edu.nju.kg_qa.service.impl;
 
 import cn.edu.nju.kg_qa.component.DataCache;
-import cn.edu.nju.kg_qa.constant.CypherArgsEnum;
+import cn.edu.nju.kg_qa.constant.LabelEnum;
 import cn.edu.nju.kg_qa.constant.PresetQuestionEnum;
 import cn.edu.nju.kg_qa.domain.dto.NodeNameAndLabelsDto;
 import cn.edu.nju.kg_qa.domain.response.PresetQuestionResponse;
@@ -42,7 +42,7 @@ public class PresetQAImpl implements PresetQAService {
                 for (int j = index; j <= i; j++) {
                     nodePrefix += tokens.get(j).word;
                 }
-                list = jieBaService.getWordLabelAndName(nodePrefix);
+                list = jieBaService.getWordLabelAndNameAndRelation(nodePrefix);
                 //不是特定图谱内节点
                 if (null == list || list.size() == 0) {
                     continue;
@@ -70,7 +70,7 @@ public class PresetQAImpl implements PresetQAService {
                                 if (presetQuestionEnum.getQid() > 100 || presetQuestionEnum.getRelationName().equals(relationType)) {
                                     PresetQuestionResponse response = new PresetQuestionResponse();
                                     //图书节点加书名号
-                                    if (presetQuestionEnum.getSrcNodeType().equals(CypherArgsEnum.LABEL_BOOK.getPropertyName())) {
+                                    if (presetQuestionEnum.getSrcNodeType().equals(LabelEnum.LABEL_BOOK.getPropertyName())) {
                                         response.setQuestionContent(presetQuestionEnum.getQuestionDescription().
                                                 replaceAll("\\[]", bookNodeName));
                                     } else {
@@ -80,7 +80,6 @@ public class PresetQAImpl implements PresetQAService {
                                     response.setNodeName(nodeName);
                                     response.setQuestionId(presetQuestionEnum.getQid());
                                     response.setNodeId(id);
-
                                     res.add(response);
                                     if (res.size() >= 10) {
                                         return res;

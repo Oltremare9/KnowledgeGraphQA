@@ -106,4 +106,5 @@ public class Hash {
         }
         return hashCode;
     }
+
 }

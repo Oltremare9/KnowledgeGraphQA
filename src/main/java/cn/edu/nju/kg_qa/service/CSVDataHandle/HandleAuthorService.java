@@ -83,8 +83,10 @@ public class HandleAuthorService {
         String authorId = "";
         try {
             author = csvReader.get(2).replaceAll("\\\\", "");
-            author = author.replaceAll("・", "");
-            authorId = (Hash.stringToHash(author) + 1000000000) + "";
+            author = author.replaceAll("・| ", "");
+            author = author.replaceAll("（", "(");
+            author = author.replaceAll("）", ")");
+            authorId = (Hash.stringToHash(author)+ "_0") ;
             assistant = csvReader.get(8).replaceAll("\\\\", "");
             author = extractNation(authorId, author);
             AuthorBeanPatch authorBean = new AuthorBeanPatch();
@@ -233,7 +235,10 @@ public class HandleAuthorService {
                 continue;
             }
             AuthorBeanPatch authorBean = new AuthorBeanPatch();
-            String authorId = (Hash.stringToHash(assist) + 1000000000) + "";
+            assist = assist.replaceAll("・| ", "");
+            assist = assist.replaceAll("（", "(");
+            assist = assist.replaceAll("）", ")");
+            String authorId = (Hash.stringToHash(assist)+ "_0");
             assist = this.extractNation(authorId, assist);
             if (null == assist) {
                 return;

@@ -33,13 +33,13 @@ public class ImportDataService {
     @Value("${spring.data.neo4j.password}")
     private static String password;
 
-//    public Driver createDrive() {
-//        return GraphDatabase.driver(uri, AuthTokens.basic(username, password));
-//    }
-
     public Driver createDrive() {
-        return GraphDatabase.driver("bolt://182.61.50.186/:7687", AuthTokens.basic("neo4j", "root"));
+        return GraphDatabase.driver(uri, AuthTokens.basic(username, password));
     }
+
+//    public Driver createDrive() {
+//        return GraphDatabase.driver("bolt://182.61.50.186/:7687", AuthTokens.basic("neo4j", "root"));
+//    }
 
 //    public Driver createDrive() {
 //        return GraphDatabase.driver("bolt://localhost:7687", AuthTokens.basic("neo4j", "root"));

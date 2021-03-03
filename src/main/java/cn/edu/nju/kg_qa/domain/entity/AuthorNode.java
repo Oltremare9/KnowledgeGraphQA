@@ -47,4 +47,26 @@ public class AuthorNode extends BaseNode {
     public AuthorNode(){
         this.label="author";
     }
+    @Property
+    @ApiModelProperty(value = "作者生平")
+    public String description;
+    @Property
+    @ApiModelProperty(value = "作者别名")
+    public String otherNames;
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getOtherNames() {
+        return otherNames;
+    }
+
+    public void setOtherNames(String otherNames) {
+        this.otherNames = otherNames;
+    }
 }

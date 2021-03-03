@@ -16,7 +16,6 @@ import org.neo4j.ogm.annotation.*;
 @NodeEntity(label = "book")
 public class BookNode extends BaseNode {
 
-
     @Property
     @ApiModelProperty(value = "图书isbn唯一id")
     private String id;
@@ -32,6 +31,19 @@ public class BookNode extends BaseNode {
     @Property
     @ApiModelProperty(value = "书籍名称")
     private String name;
+
+
+    @Property
+    @ApiModelProperty(value = "书籍摘要")
+    private String abs;
+
+    public String getAbs() {
+        return abs;
+    }
+
+    public void setAbs(String abs) {
+        this.abs = abs;
+    }
 
     public String getId() {
         return id;

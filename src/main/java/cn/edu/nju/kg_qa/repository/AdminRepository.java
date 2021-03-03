@@ -2,9 +2,11 @@ package cn.edu.nju.kg_qa.repository;
 
 import cn.edu.nju.kg_qa.domain.base.BaseNode;
 import cn.edu.nju.kg_qa.domain.dto.RepeatedAuthorNameAndList;
+import cn.edu.nju.kg_qa.domain.dto.ResultDto;
 import cn.edu.nju.kg_qa.domain.entity.AuthorNode;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -15,6 +17,7 @@ import java.util.List;
  * @author HaoNanWang<br />
  * @since JDK 11
  */
+@Repository
 public interface AdminRepository extends Neo4jRepository<BaseNode,Long> {
 
     /**
@@ -45,4 +48,52 @@ public interface AdminRepository extends Neo4jRepository<BaseNode,Long> {
             "where nodeCount > 1\n" +
             "return nodeName,repeatedNodes skip $skip limit $limit" )
     List<RepeatedAuthorNameAndList> getAllRepeatedAuthorNodes(int skip , int limit);
+
+    /**
+     * 根据跳数返回是否两点间存在关系 有返回1
+     * @param nodeId1
+     * @param nodeId2
+     * @return
+     */
+    @Query("MATCH (n1),(n2)\n" +
+            "where id(n1)=$nodeId1 and id(n2)=$nodeId2\n" +
+            "RETURN\n" +
+            "CASE\n" +
+            "  WHEN (n1)-[*1..2]-(n2)\n" +
+            "    THEN \"1\"\n" +
+            "  ELSE \"0\"\n" +
+            "END")
+    String getRelationPathNumsByNodeIdJump2(Long nodeId1, Long nodeId2);
+
+    /**
+     * 根据跳数返回是否两点间存在关系 有返回1
+     * @param nodeId1
+     * @param nodeId2
+     * @return
+     */
+    @Query("MATCH (n1),(n2) " +
+            "where id(n1)=$nodeId1 and id(n2)=$nodeId2 " +
+            "RETURN " +
+            "CASE " +
+            "  WHEN (n1)-[*1..3]-(n2)" +
+            "    THEN \"1\"\n" +
+            "  ELSE \"0\"\n" +
+            "END")
+    String getRelationPathNumsByNodeIdJump3(Long nodeId1,Long nodeId2);
+
+    /**
+     * 根据跳数返回是否两点间存在关系 有返回1
+     * @param nodeId1
+     * @param nodeId2
+     * @return
+     */
+    @Query("MATCH (n1),(n2) " +
+            "where id(n1)=$nodeId1 and id(n2)=$nodeId2 " +
+            "RETURN " +
+            "CASE " +
+            "  WHEN (n1)-[*1..4]-(n2)" +
+            "    THEN \"1\"\n" +
+            "  ELSE \"0\"\n" +
+            "END")
+    String getRelationPathNumsByNodeIdJump4(Long nodeId1,Long nodeId2);
 }

@@ -27,4 +27,12 @@ public interface AdminService {
      */
     List<RepeatedAuthorNameAndList> getAllRepeatedAuthorNodes(int skip);
 
+    /**
+     * 根据跳数返回是否两点间存在关系 有返回1
+     * @param nodeId1
+     * @param nodeId2
+     * @return
+     */
+    int getRelationPathNumsByNodeId(Long nodeId1, Long nodeId2);
+
 }

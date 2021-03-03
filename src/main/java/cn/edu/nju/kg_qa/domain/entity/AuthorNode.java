@@ -39,6 +39,17 @@ public class AuthorNode extends BaseNode {
 
     private String label;
 
+    @Property
+    private String id;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public AuthorNode(String name, String label) {
         this.name = name;
         this.label = "author";

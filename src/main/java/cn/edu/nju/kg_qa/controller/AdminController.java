@@ -4,14 +4,13 @@ import cn.edu.nju.kg_qa.common.CommonResult;
 import cn.edu.nju.kg_qa.config.Config;
 import cn.edu.nju.kg_qa.domain.dto.RepeatedAuthorNameAndList;
 import cn.edu.nju.kg_qa.domain.entity.AuthorNode;
+import cn.edu.nju.kg_qa.domain.request.DoubleNodeIdRequest;
 import cn.edu.nju.kg_qa.service.AdminService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -42,4 +41,11 @@ public class AdminController {
         List<RepeatedAuthorNameAndList> list = adminService.getAllRepeatedAuthorNodes(skip * Config.limit);
         return CommonResult.success(list);
     }
+
+    @ApiOperation(value = "判断两点间潜在关系距离 0为4跳内没有 id用")
+    @PostMapping("/getRelationPathNumsByNodeId")
+    public CommonResult<Integer> getRelationPathNumsByNodeId(@Validated DoubleNodeIdRequest request){
+        return CommonResult.success(adminService.getRelationPathNumsByNodeId(request.getNodeId1(),request.getNodeId2()));
+    }
+
 }

@@ -27,4 +27,15 @@ public interface ComplexNodeRepository extends Neo4jRepository<BaseNode,Long> {
     @Query("Match ans=(p)-[r]-(a) where a.name=$nodeName return p")
     List<BaseNode> findAnyProperNodesByName(@Param("nodeName") String nodeName);
 
+    /**
+     * 根据节点自增id返回节点
+     * @param id
+     * @return
+     */
+    @Query("Match (p) where id(p)=$id return p")
+    List<BaseNode> findNodeByIdAnd(Long id);
+
+    @Query("match (p)-[r]-(q) where id(p)=$id and type(r)=$relation return q")
+    List<BaseNode> findNodeByIdAndRelation(Long id,String relation);
+
 }

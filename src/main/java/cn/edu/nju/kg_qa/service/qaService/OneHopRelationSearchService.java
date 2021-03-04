@@ -1,6 +1,7 @@
 package cn.edu.nju.kg_qa.service.qaService;
 
 import cn.edu.nju.kg_qa.domain.base.BaseRelation;
+import cn.edu.nju.kg_qa.domain.response.OneHopResponse;
 import org.springframework.boot.autoconfigure.integration.IntegrationAutoConfiguration;
 
 import java.util.List;
@@ -24,4 +25,12 @@ public interface OneHopRelationSearchService {
      * @return
      */
     List<BaseRelation> oneHopRelationSearch(String srcNodeName, Integer nodeId, Integer qid, Integer skip);
+
+
+    /**
+     * 单跳问答
+     * @param question
+     * @return
+     */
+    List<OneHopResponse> getQuestionType(String question);
 }

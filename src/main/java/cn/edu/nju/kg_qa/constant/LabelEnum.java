@@ -11,7 +11,7 @@ public enum LabelEnum {
 
     LABEL_AUTHOR(1,"author"),
     LABEL_BOOK(2,"book"),
-    LABEL_BOOKSERIES(3,"bookSeries"),
+    LABEL_BOOKSERIES(3,"sub"),
     LABEL_CITY(4,"city"),
     LABEL_CONCEPT(5,"concept"),
     LABEL_INSTITUTE(6,"institute"),

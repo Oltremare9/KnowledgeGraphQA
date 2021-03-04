@@ -33,7 +33,7 @@ public class BookNode extends BaseNode {
     private String name;
 
 
-    @Property
+    @Property(value = "abstract")
     @ApiModelProperty(value = "书籍摘要")
     private String abs;
 

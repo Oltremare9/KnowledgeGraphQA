@@ -5,6 +5,7 @@ import cn.edu.nju.kg_qa.component.DataCache;
 import cn.edu.nju.kg_qa.config.Config;
 import cn.edu.nju.kg_qa.domain.base.BaseRelation;
 import cn.edu.nju.kg_qa.domain.request.OneHopRequest;
+import cn.edu.nju.kg_qa.domain.response.OneHopResponse;
 import cn.edu.nju.kg_qa.service.qaService.OneHopRelationSearchService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -13,9 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.xml.crypto.Data;
 import javax.xml.transform.Result;
@@ -58,5 +57,11 @@ public class OneHopRelationSearchController {
         res = oneHopRelationSearchService.oneHopRelationSearch(nodeName, nodeId, qid, skip);
         return CommonResult.success(res);
 
+    }
+
+    @ApiOperation(value ="单跳问题解析 输入问题返回答案")
+    @GetMapping("/oneHopQuestion/{question}")
+    public CommonResult<List<OneHopResponse>> oneHopQuestion(@PathVariable String question){
+        return CommonResult.success(oneHopRelationSearchService.getQuestionType(question));
     }
 }

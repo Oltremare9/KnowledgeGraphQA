@@ -105,7 +105,7 @@ public class OneHopRelationSearchImpl implements OneHopRelationSearchService {
                     for (NodeNameAndLabelsDto nodes : res) {
                         String searchResultType = nodes.getLabel().get(0);
 
-                        String searchQuestion = question.replace(nodes.getNodeName(), "<" + searchResultType + ">");
+                        String searchQuestion = question.replace(nodePrefix, "<" + searchResultType + ">");
 
                         RestTemplate restTemplate = new RestTemplate();
                         BertRequest request = new BertRequest();

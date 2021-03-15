@@ -1,6 +1,7 @@
 package cn.edu.nju.kg_qa.service.qaService;
 
 import cn.edu.nju.kg_qa.domain.base.BaseRelation;
+import cn.edu.nju.kg_qa.domain.response.EchartsResponse;
 import cn.edu.nju.kg_qa.domain.response.OneHopResponse;
 import org.springframework.boot.autoconfigure.integration.IntegrationAutoConfiguration;
 
@@ -33,4 +34,11 @@ public interface OneHopRelationSearchService {
      * @return
      */
     List<OneHopResponse> getQuestionType(String question);
+
+    /**
+     * 单跳问答 返回Echarts数据格式
+     * @param question
+     * @return
+     */
+    EchartsResponse getQuestionTypeEcharts(String question);
 }

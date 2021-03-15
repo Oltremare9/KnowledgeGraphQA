@@ -17,14 +17,13 @@ import org.neo4j.ogm.annotation.Property;
 @ApiModel(value = "系类丛书实体类")
 @NodeEntity(label = "bookSeries")
 public class BookSeriesNode extends BaseNode {
-    @Property
-    @ApiModelProperty(value = "系列丛书名")
-    private String name;
 
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
     public void setName(String name) {
         this.name = name;
     }

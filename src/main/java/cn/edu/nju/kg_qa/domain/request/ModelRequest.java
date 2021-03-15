@@ -9,7 +9,7 @@ import java.util.List;
  * @author HaoNanWang<br />
  * @since JDK 11
  */
-public class BertRequest {
+public class ModelRequest {
     List<String> data;
 
     public List<String> getData() {

@@ -47,5 +47,6 @@ public class AdminController {
     public CommonResult<Integer> getRelationPathNumsByNodeId(@Validated DoubleNodeIdRequest request){
         return CommonResult.success(adminService.getRelationPathNumsByNodeId(request.getNodeId1(),request.getNodeId2()));
     }
+    
 
 }

@@ -16,14 +16,13 @@ import org.neo4j.ogm.annotation.Property;
 @ApiModel(value = "国籍、朝代实体")
 @NodeEntity(label = "nation")
 public class NationNode extends BaseNode {
-    @Property
-    @ApiModelProperty(value = "国籍名/朝代名")
-    private String name;
 
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
     public void setName(String name) {
         this.name = name;
     }

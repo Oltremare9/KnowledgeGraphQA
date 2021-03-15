@@ -57,7 +57,7 @@ public class HandleBookSeriesService {
     }
 
     public void writeBookSeriesEntity(){
-        File bookSeriesEntityFile = new File(Config.OUT_CSV_PATH  + "bookSeries_entity.csv");
+        File bookSeriesEntityFile = new File(Config.OUT_CSV_PATH  + "sub_entity.csv");
         if (bookSeriesEntityFile.exists()) {
             bookSeriesEntityFile.delete();
         }
@@ -115,7 +115,7 @@ public class HandleBookSeriesService {
         }
         CsvWriter cWriter = new CsvWriter(writer, ',');
         try {
-            cWriter.writeRecord("book_id,bookSeries_name".split(","), true);
+            cWriter.writeRecord("book_id,sub_name".split(","), true);
         } catch (IOException e) {
             logger.error("e:写入表头失败");
             e.printStackTrace();

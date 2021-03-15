@@ -28,11 +28,6 @@ public class BookNode extends BaseNode {
     @ApiModelProperty(value = "出版日期")
     private String date;
 
-    @Property
-    @ApiModelProperty(value = "书籍名称")
-    private String name;
-
-
     @Property(value = "abstract")
     @ApiModelProperty(value = "书籍摘要")
     private String abs;
@@ -69,10 +64,12 @@ public class BookNode extends BaseNode {
         this.date = date;
     }
 
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
     public void setName(String name) {
         this.name = name;
     }

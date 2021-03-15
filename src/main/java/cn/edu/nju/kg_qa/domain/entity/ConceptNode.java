@@ -17,15 +17,12 @@ import org.neo4j.ogm.annotation.Property;
 @NodeEntity(label = "concept")
 public class ConceptNode extends BaseNode {
 
-    @Property
-    @ApiModelProperty(value = "概念名")
-    private String name;
-
-
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
     public void setName(String name) {
         this.name = name;
     }

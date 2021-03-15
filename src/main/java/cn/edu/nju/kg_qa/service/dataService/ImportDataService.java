@@ -33,13 +33,13 @@ public class ImportDataService {
     @Value("${spring.data.neo4j.password}")
     private static String password;
 
-    public Driver createDrive() {
-        return GraphDatabase.driver(uri, AuthTokens.basic(username, password));
-    }
-
 //    public Driver createDrive() {
-//        return GraphDatabase.driver("bolt://182.61.50.186/:7687", AuthTokens.basic("neo4j", "root"));
+//        return GraphDatabase.driver(uri, AuthTokens.basic(username, password));
 //    }
+
+    public Driver createDrive() {
+        return GraphDatabase.driver("bolt://182.61.50.186/:7687", AuthTokens.basic("neo4j", "root"));
+    }
 
 //    public Driver createDrive() {
 //        return GraphDatabase.driver("bolt://localhost:7687", AuthTokens.basic("neo4j", "root"));
@@ -141,13 +141,13 @@ public class ImportDataService {
                         for (int j = 0; j < propertyNum; j++) {
                             execute = execute.replace("value" + j, "'" + array[j].replaceAll("“|”|\"|\\\\", "") + "'");
                             if (j == indexOfEntityName) {
-                                if (!entityFile.getName().contains("concept")) {
+//                                if (!entityFile.getName().contains("concept")) {
                                     String str = "[`\\\\~!@#$%^&*()+=|{}':;',\\[\\].<>/?~！@#￥%…&*（）——+|{}【】‘；：”“’。，、？《》]";
                                     String value = array[j];
                                     value = value.replaceAll(str, "");
                                     entityNameForJieBa.add(value);
                                     entityNameAndTypeForJieBa.add(value + "\t" + entityName);
-                                }
+//                                }
                             }
                         }
                         tx.run(execute);

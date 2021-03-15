@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import org.neo4j.ogm.annotation.GeneratedValue;
 import org.neo4j.ogm.annotation.Id;
 import org.neo4j.ogm.annotation.NodeEntity;
+import org.neo4j.ogm.annotation.Property;
 
 import java.awt.datatransfer.DataFlavor;
 
@@ -32,5 +33,14 @@ public class BaseNode extends Base{
     @ApiModelProperty(value = "neo4j默认主键")
     private Long identity;
 
+    @Property
+    public String name;
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }

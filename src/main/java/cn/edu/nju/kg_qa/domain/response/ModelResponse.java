@@ -10,13 +10,13 @@ import java.util.List;
  * @since JDK 11
  */
 public class ModelResponse {
-    List<String> data;
+    List<List<String>> data;
 
-    public List<String> getData() {
+    public List<List<String>> getData() {
         return data;
     }
 
-    public void setData(List<String> data) {
+    public void setData(List<List<String>> data) {
         this.data = data;
     }
 }

@@ -32,4 +32,7 @@ public interface AuthorRepository extends Neo4jRepository<AuthorNode,Long> {
      */
     @Query("Match ans=(p:book)-[r]-(a:author) where p.name=~'.*'+$bookName+'.*' return ans")
     List<AuthorNode> findAuthorByBookName(@Param("bookName") String bookName);
+
+    @Query("Match (p:author) where p.id=$id return p")
+    List<AuthorNode> findAuthorById(String id);
 }

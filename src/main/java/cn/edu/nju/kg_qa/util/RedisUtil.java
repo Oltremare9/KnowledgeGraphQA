@@ -2,6 +2,7 @@ package cn.edu.nju.kg_qa.util;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.util.CollectionUtils;
 
 import java.util.*;
@@ -621,6 +622,17 @@ public class RedisUtil {
      */
     public Set<Object> revRange(String key, int start, int end) {
         return redisTemplate.opsForZSet().reverseRange(key, start, end);
+    }
+
+    /**
+     * 返回有序的集合中，score大的在前面 并且返回score
+     * @param key
+     * @param start
+     * @param end
+     * @return
+     */
+    public Set<ZSetOperations.TypedTuple<Object>> revRangeWithScore(String key, int start, int end) {
+        return redisTemplate.opsForZSet().reverseRangeWithScores(key, start, end);
     }
 
 }

@@ -10,7 +10,8 @@ package cn.edu.nju.kg_qa.constant;
 public enum RedisPrefix {
     Q_Type_ZSet(1,"Q_Type_ZSet",""),
     E_Type_ZSet(2,"E_Type_ZSet",""),
-    E_Node_ZSet(3,"E_","E_+节点类型名+_节点id")
+    E_Node_ZSet(3,"E_","E_+节点类型名+_节点id"),
+    E_Node_Hash(4,"E_Hash_","直接接节点id")
     ;
 
     private int prefixId;

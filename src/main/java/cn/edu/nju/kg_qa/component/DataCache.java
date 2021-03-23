@@ -40,7 +40,7 @@ public class DataCache {
 
         logger.warn("加载别名文件中---------------------------");
         File file=new File(Config.OTHER_NAMES_PATH);
-        FileReader fileReader=null;
+        FileReader fileReader;
 
         try {
             fileReader=new FileReader(file);

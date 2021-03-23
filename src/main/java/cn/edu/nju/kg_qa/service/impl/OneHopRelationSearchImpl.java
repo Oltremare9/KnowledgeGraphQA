@@ -114,14 +114,18 @@ public class OneHopRelationSearchImpl implements OneHopRelationSearchService {
             node=authorRepository.findAuthorById(nodeId).get(0);
         }else {
             List<BaseNode> nodes = complexNodeRepository.findNodeByName(entityName);
-            node = nodes.get(0);
+            if(nodes.size()>0) {
+                node = nodes.get(0);
+            }else{
+                return returnValue;
+            }
         }
         if (relationType.equals(dstNodeType)) {
             List<BaseNode> dstNodes = complexNodeRepository.findNodeByIdAnd(node.getIdentity().longValue());
             if (node != null && dstNodes.size() != 0) {
                 OneHopResponse oneHopResponse=new OneHopResponse();
                 oneHopResponse.setBase(dstNodes);
-                oneHopResponse.setValueType(relationType);
+                oneHopResponse.setValueType(relationType+"_property");
                 returnValue.add(oneHopResponse);
             }
             //关系查询
@@ -129,8 +133,9 @@ public class OneHopRelationSearchImpl implements OneHopRelationSearchService {
             List<BaseNode> dstNodes = complexNodeRepository.findNodeByIdAndRelation(node.getIdentity().longValue(), relationType);
             if (dstNodes != null && dstNodes.size() != 0) {
                 OneHopResponse oneHopResponse=new OneHopResponse();
+                dstNodes.add(node);
                 oneHopResponse.setBase(dstNodes);
-                oneHopResponse.setValueType(relationType);
+                oneHopResponse.setValueType(relationType+"_relation");
                 returnValue.add(oneHopResponse);
             }
         }

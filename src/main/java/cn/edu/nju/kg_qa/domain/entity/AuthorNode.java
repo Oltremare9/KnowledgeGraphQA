@@ -78,4 +78,15 @@ public class AuthorNode extends BaseNode {
     public void setOtherNames(String otherNames) {
         this.otherNames = otherNames;
     }
+
+    @Property
+    String birth;
+
+    public String getBirth() {
+        return birth;
+    }
+
+    public void setBirth(String birth) {
+        this.birth = birth;
+    }
 }

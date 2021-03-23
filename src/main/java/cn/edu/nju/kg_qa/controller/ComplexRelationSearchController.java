@@ -44,5 +44,12 @@ public class ComplexRelationSearchController {
         return CommonResult.success(list);
     }
 
+    @ApiOperation("根据节点id返回所有符合条件的节点关系")
+    @GetMapping("/findAnyRelationById/{nodeId}")
+    public CommonResult<List<BaseRelation>> findAnyRelationById(@PathVariable Long nodeId){
+        List<BaseRelation> list=complexService.findAnyRelationByIn(nodeId);
+        return CommonResult.success(list);
+    }
+
 
 }

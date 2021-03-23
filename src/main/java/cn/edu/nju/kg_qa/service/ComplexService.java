@@ -47,4 +47,8 @@ public class ComplexService {
     public List<BaseRelation> findAnyRelationByName(String nodeName){
         return complexRelationRepository.findAnyRelationByName(nodeName);
     }
+
+    public List<BaseRelation> findAnyRelationByIn(Long id){
+        return complexRelationRepository.findAnyRelationByIdentity(id);
+    }
 }

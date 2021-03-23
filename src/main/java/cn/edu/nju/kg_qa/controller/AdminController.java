@@ -2,17 +2,21 @@ package cn.edu.nju.kg_qa.controller;
 
 import cn.edu.nju.kg_qa.common.CommonResult;
 import cn.edu.nju.kg_qa.config.Config;
+import cn.edu.nju.kg_qa.domain.dto.NameAndScoreDto;
 import cn.edu.nju.kg_qa.domain.dto.RepeatedAuthorNameAndList;
-import cn.edu.nju.kg_qa.domain.entity.AuthorNode;
 import cn.edu.nju.kg_qa.domain.request.DoubleNodeIdRequest;
 import cn.edu.nju.kg_qa.service.AdminService;
+import com.google.gson.Gson;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Description: <br/>
@@ -46,6 +50,13 @@ public class AdminController {
     @PostMapping("/getRelationPathNumsByNodeId")
     public CommonResult<Integer> getRelationPathNumsByNodeId(@Validated DoubleNodeIdRequest request){
         return CommonResult.success(adminService.getRelationPathNumsByNodeId(request.getNodeId1(),request.getNodeId2()));
+    }
+
+    @ApiOperation(value = "获取redis统计数据")
+    @PostMapping("/getStatisticsByType/{type}")
+    public CommonResult<String> getStatisticsByType(@PathVariable int type){
+        ArrayList<NameAndScoreDto> res= adminService.getStatisticsByKeyAndType(type, "");
+        return CommonResult.success(new Gson().toJson(res));
     }
 
 }

@@ -1,19 +1,28 @@
 package cn.edu.nju.kg_qa.service.impl;
 
+import cn.edu.nju.kg_qa.component.DataCache;
 import cn.edu.nju.kg_qa.config.Config;
+import cn.edu.nju.kg_qa.constant.RedisPrefix;
+import cn.edu.nju.kg_qa.domain.base.BaseNode;
+import cn.edu.nju.kg_qa.domain.dto.NameAndScoreDto;
 import cn.edu.nju.kg_qa.domain.dto.RepeatedAuthorNameAndList;
-import cn.edu.nju.kg_qa.domain.dto.ResultDto;
 import cn.edu.nju.kg_qa.domain.entity.AuthorNode;
 import cn.edu.nju.kg_qa.repository.AdminRepository;
+import cn.edu.nju.kg_qa.repository.ComplexNodeRepository;
 import cn.edu.nju.kg_qa.service.AdminService;
+import cn.edu.nju.kg_qa.util.RedisUtil;
+import org.checkerframework.checker.units.qual.A;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Description: <br/>
@@ -29,6 +38,12 @@ public class AdminImpl implements AdminService {
 
     @Autowired
     AdminRepository adminRepository;
+
+    @Autowired
+    ComplexNodeRepository complexNodeRepository;
+
+    @Autowired
+    RedisUtil redisUtil;
 
     @Override
     @Transactional
@@ -77,5 +92,38 @@ public class AdminImpl implements AdminService {
             }
         }
         return 0;
+    }
+
+    @Override
+    public ArrayList<NameAndScoreDto> getStatisticsByKeyAndType(int type, String nodeType) {
+        Set<ZSetOperations.TypedTuple<Object>> redisSet=new HashSet<>();
+        ArrayList<NameAndScoreDto> res=new ArrayList<>();
+        if(type==0){
+            redisSet= redisUtil.revRangeWithScore(RedisPrefix.Q_Type_ZSet.getPrefix(), 0, -1);
+            for(ZSetOperations.TypedTuple<Object> typedTuple:redisSet){
+                NameAndScoreDto dto=new NameAndScoreDto();
+                dto.setName(DataCache.presetQuestionEnumMap.get(Integer.parseInt(typedTuple.getValue().toString())).getQuestionDescription());
+                dto.setScore(typedTuple.getScore());
+                res.add(dto);
+            }
+        }else if (type==1){
+            redisSet= redisUtil.revRangeWithScore(RedisPrefix.E_Type_ZSet.getPrefix(), 0, -1);
+            for(ZSetOperations.TypedTuple<Object> typedTuple:redisSet){
+                NameAndScoreDto dto=new NameAndScoreDto();
+                dto.setScore(typedTuple.getScore());
+                dto.setName(typedTuple.getValue().toString());
+                res.add(dto);
+            }
+        }else if (type==2){
+            redisSet= redisUtil.revRangeWithScore(RedisPrefix.E_Node_ZSet.getPrefix()+"author", 0, -1);
+            for(ZSetOperations.TypedTuple<Object> typedTuple:redisSet){
+                NameAndScoreDto dto=new NameAndScoreDto();
+                BaseNode node =complexNodeRepository.findNodeByIdAnd(Long.parseLong(typedTuple.getValue().toString())).get(0);
+                dto.setScore(typedTuple.getScore());
+                dto.setName(node.getName());
+                res.add(dto);
+            }
+        }
+        return res;
     }
 }

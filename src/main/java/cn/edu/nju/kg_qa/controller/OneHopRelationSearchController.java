@@ -7,6 +7,7 @@ import cn.edu.nju.kg_qa.domain.base.BaseRelation;
 import cn.edu.nju.kg_qa.domain.request.OneHopRequest;
 import cn.edu.nju.kg_qa.domain.response.OneHopResponse;
 import cn.edu.nju.kg_qa.service.qaService.OneHopRelationSearchService;
+import com.google.gson.Gson;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -63,5 +64,14 @@ public class OneHopRelationSearchController {
     @GetMapping("/oneHopQuestion/{question}")
     public CommonResult<List<OneHopResponse>> oneHopQuestion(@PathVariable String question){
         return CommonResult.success(oneHopRelationSearchService.getQuestionType(question));
+    }
+
+    @ApiOperation(value ="单跳问题解析 输入问题返回答案 Echarts格式")
+    @GetMapping("/oneHopQuestionEcharts/{question}")
+    public CommonResult<String> oneHopQuestionEcharts(@PathVariable String question){
+        Gson gson=new Gson();
+        String res=gson.toJson(oneHopRelationSearchService.getQuestionTypeEcharts(question));
+        logger.error("echarts数据为"+res);
+        return CommonResult.success(res);
     }
 }

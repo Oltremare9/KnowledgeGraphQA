@@ -9,14 +9,14 @@ import java.util.List;
  * @author HaoNanWang<br />
  * @since JDK 11
  */
-public class BertResponse {
-    List<String> data;
+public class ModelResponse {
+    List<List<String>> data;
 
-    public List<String> getData() {
+    public List<List<String>> getData() {
         return data;
     }
 
-    public void setData(List<String> data) {
+    public void setData(List<List<String>> data) {
         this.data = data;
     }
 }

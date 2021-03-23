@@ -16,7 +16,7 @@ public enum LabelEnum {
     LABEL_CONCEPT(5,"concept"),
     LABEL_INSTITUTE(6,"institute"),
     LABEL_NATION(7,"nation"),
-    LABEL_DIRECTION(8,"researchDirection"),
+    LABEL_DIRECTION(8,"research"),
     LABEL_COMPANY(9,"company");
 
     private String entityName;

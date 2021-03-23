@@ -18,14 +18,12 @@ import org.neo4j.ogm.annotation.Property;
 @NodeEntity(label = "institute")
 public class InstituteNode extends BaseNode {
 
-    @Property
-    @ApiModelProperty(value = "出版机构名称")
-    private String name;
-
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
     public void setName(String name) {
         this.name = name;
     }
